@@ -65,8 +65,8 @@ public class PlayerControl : MonoBehaviour {
 			Destroy (coll.gameObject);
 			wallet++;
 		} else if (coll.gameObject.tag == "Heart") {
+			Destroy (coll.gameObject);
 			if (health < maxHealth) {
-				Destroy (coll.gameObject);
 				health++;
 				if (health > maxHealth) {
 					health = maxHealth;

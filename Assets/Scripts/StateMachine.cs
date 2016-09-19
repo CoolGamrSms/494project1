@@ -181,18 +181,56 @@ public class StateLinkNormalMovement : State {
 			vertical_input = 0.0f;
 		}
 
-		pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, vertical_input, 0) 
-																* pc.walking_velocity 
-																* time_delta_fraction;
-		if (horizontal_input > 0.0f)
-			pc.current_direction = Direction.EAST;
-		else if (horizontal_input < 0.0f)
-			pc.current_direction = Direction.WEST;
-		else if (vertical_input > 0.0f)
-			pc.current_direction = Direction.NORTH;
-		else if (vertical_input < 0.0f)
-			pc.current_direction = Direction.SOUTH;
 
+		if (horizontal_input == 1.0f) {
+			pc.current_direction = Direction.EAST;
+			if (pc.transform.position.y % 1 != 0) {
+				//Debug.Log (pc.transform.position.y % 1);
+				if (pc.transform.position.y % 1 < 0.4 && pc.transform.position.y > 0.1) {
+					vertical_input = -0.1f;
+				} else if(pc.transform.position.y % 1 > 0.6 && pc.transform.position.y < 0.9) {
+					vertical_input = 0.1f;
+				}
+			}
+
+		} else if (horizontal_input == -1.0f) {
+			pc.current_direction = Direction.WEST;
+			if (pc.transform.position.y % 1 != 0) {
+				//Debug.Log (pc.transform.position.y % 1);
+				if (pc.transform.position.y % 1 < 0.4 && pc.transform.position.y > 0.1) {
+					vertical_input = -0.1f;
+				} else if(pc.transform.position.y % 1 > 0.6 && pc.transform.position.y < 0.9) {
+					vertical_input = 0.1f;
+				}
+			}
+
+		} else if (vertical_input == 1.0f) {
+			pc.current_direction = Direction.NORTH;
+			if (pc.transform.position.x % 1 != 0) {
+				//Debug.Log (pc.transform.position.y % 1);
+				if (pc.transform.position.x % 1 > 0.6) {
+					horizontal_input = -0.1f;
+				} else if(pc.transform.position.x % 1 < 0.4) {
+					horizontal_input = 0.1f;
+				}
+			}
+
+		} else if (vertical_input == -1.0f) {
+			pc.current_direction = Direction.SOUTH;
+			if (pc.transform.position.x % 1 != 0) {
+				//Debug.Log (pc.transform.position.y % 1);
+				if (pc.transform.position.x % 1 > 0.6) {
+					horizontal_input = -0.1f;
+				} else if(pc.transform.position.x % 1 < 0.4) {
+					horizontal_input = 0.1f;
+				}
+			}
+		}
+		
+		pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, vertical_input, 0) 
+																			* pc.walking_velocity 
+																			* time_delta_fraction;
+		
 		if (Input.GetKeyDown (KeyCode.Z))
 			state_machine.ChangeState (new StateLinkAttack (pc, pc.selected_weapon_prefab, 15));
 			
