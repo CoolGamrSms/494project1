@@ -142,9 +142,9 @@ public class StatePlayAnimationForHeldKey : State
 		// Modulus is necessary so we don't overshoot the length of the animation.
 		int current_frame_index = ((int)((Time.time - animation_start_time) / (1.0 / fps)) % animation_length);
 		renderer.sprite = animation[current_frame_index];
-		
-		// If another key is pressed, we need to transition to a different walking animation.
-		if(Input.GetKeyDown(KeyCode.DownArrow))
+
+        // If another key is pressed, we need to transition to a different walking animation.
+        if(Input.GetKeyDown(KeyCode.DownArrow))
 			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 6, KeyCode.DownArrow));
 		else if(Input.GetKeyDown(KeyCode.UpArrow))
 			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 6, KeyCode.UpArrow));
@@ -152,11 +152,10 @@ public class StatePlayAnimationForHeldKey : State
 			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 6, KeyCode.RightArrow));
 		else if(Input.GetKeyDown(KeyCode.LeftArrow))
 			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 6, KeyCode.LeftArrow));
-		
 		// If we detect the specified key has been released, return to the idle state.
 		else if(!Input.GetKey(key))
 			state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, animation[1]));
-	}
+    }
 }
 
 // Additional recommended states:
@@ -182,7 +181,23 @@ public class StateLinkNormalMovement : State {
 		}
 
 
-		if (horizontal_input == 1.0f) {
+        Vector3 pos = pc.transform.position;
+        if (pc.current_direction == Direction.NORTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
+        if (pc.current_direction == Direction.SOUTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
+        if (pc.current_direction == Direction.EAST && Mathf.Abs(vertical_input) > 0) pos.x  = Mathf.Round(pos.x * 2) / 2f;
+        if (pc.current_direction == Direction.WEST && Mathf.Abs(vertical_input) > 0) pos.x  = Mathf.Round(pos.x * 2) / 2f;
+
+        pc.transform.position = pos;
+
+
+        //Set new direction
+        if (horizontal_input ==  1.0f) pc.current_direction = Direction.EAST;
+        if (horizontal_input == -1.0f) pc.current_direction = Direction.WEST;
+        if (vertical_input   ==  1.0f) pc.current_direction = Direction.NORTH;
+        if (vertical_input   == -1.0f) pc.current_direction = Direction.SOUTH;
+
+
+        /*if (horizontal_input == 1.0f) {
 			pc.current_direction = Direction.EAST;
 			if (pc.transform.position.y % 1 != 0) {
 				//Debug.Log (pc.transform.position.y % 1);
@@ -225,9 +240,9 @@ public class StateLinkNormalMovement : State {
 					horizontal_input = 0.1f;
 				}
 			}
-		}
-		
-		pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, vertical_input, 0) 
+		}*/
+
+        pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, vertical_input, 0) 
 																			* pc.walking_velocity 
 																			* time_delta_fraction;
 		

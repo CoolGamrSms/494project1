@@ -65,13 +65,29 @@ public class Tile : MonoBehaviour {
         bc.enabled = true;
         char c = ShowMapOnCamera.S.collisionS[tileNum];
         switch (c) {
+        case 'D': // Door tile
+            gameObject.GetComponent<SpriteRenderer>().sortingOrder = 3;
+            bc.enabled = false;
+            break;
         case 'S': // Solid
             bc.center = Vector3.zero;
             bc.size = Vector3.one;
             break;
-		case 'P': // Pushable
-			//Make pushable
-			break;
+        case 'H': //Half solid up ( horizontal doorway)
+            bc.center = new Vector3(0, 0.25f, 0);
+            bc.size = new Vector3(1, 0.5f, 1);
+            break;
+        case 'L': //Half solid left (vertical doorway)
+            bc.center = new Vector3(-0.25f, 0f, 0);
+            bc.size = new Vector3(0.5f, 1, 1);
+            break;
+        case 'R': //Half solid right (vertical doorway)
+            bc.center = new Vector3(0.25f, 0, 0);
+            bc.size = new Vector3(0.5f, 1, 1);
+            break;
+        case 'P': // Pushable
+		//Make pushable
+		break;
         default:
             bc.enabled = false;
             break;
