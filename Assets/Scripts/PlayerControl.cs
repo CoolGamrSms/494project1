@@ -2,7 +2,7 @@
 using System.Collections;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
-public enum EntityState {NORMAL, ATTACKING, TRANSITION};
+public enum EntityState {NORMAL, ATTACKING, TRANSITION, DAMAGED};
 
 public class PlayerControl : MonoBehaviour {
 
@@ -71,6 +71,17 @@ public class PlayerControl : MonoBehaviour {
 				if (health > maxHealth) {
 					health = maxHealth;
 				}
+			}
+		} else if (coll.gameObject.tag == "Enemy") {
+
+			if (this.current_state != EntityState.DAMAGED) {
+				//Move link backwards
+				this.current_state = EntityState.DAMAGED;
+				control_state_machine.ChangeState(new StateLinkDamaged(this, GetComponent<SpriteRenderer> (), 100));
+				health--;
+			}
+			if (health <= 0) {
+				//death scene
 			}
 		}
 	}
