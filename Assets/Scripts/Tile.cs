@@ -63,6 +63,7 @@ public class Tile : MonoBehaviour {
         
         // Collider info from collisionData
         bc.enabled = true;
+        gameObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
         char c = ShowMapOnCamera.S.collisionS[tileNum];
         switch (c) {
         case 'D': // Door tile

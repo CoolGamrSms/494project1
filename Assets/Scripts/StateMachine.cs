@@ -82,7 +82,7 @@ public class StateIdleWithSprite : State
 	
 	public override void OnUpdate(float time_delta_fraction)
 	{
-		if(pc.current_state == EntityState.ATTACKING)
+		if(pc.current_state == EntityState.ATTACKING || pc.current_state == EntityState.TRANSITION)
 			return;
 
 		// Transition to walking animations on key press.
@@ -130,7 +130,7 @@ public class StatePlayAnimationForHeldKey : State
 	
 	public override void OnUpdate(float time_delta_fraction)
 	{
-		if(pc.current_state == EntityState.ATTACKING)
+		if(pc.current_state == EntityState.ATTACKING || pc.current_state == EntityState.TRANSITION)
 			return;
 
 		if(this.animation_length <= 0)
@@ -173,28 +173,7 @@ public class StateLinkNormalMovement : State {
 	}
 
 	public override void OnUpdate(float time_delta_fraction) {
-		float horizontal_input = Input.GetAxis ("Horizontal");
-		float vertical_input = Input.GetAxis ("Vertical");
-
-		if (horizontal_input != 0.0f) {
-			vertical_input = 0.0f;
-		}
-
-
-        Vector3 pos = pc.transform.position;
-        if (pc.current_direction == Direction.NORTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
-        if (pc.current_direction == Direction.SOUTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
-        if (pc.current_direction == Direction.EAST && Mathf.Abs(vertical_input) > 0) pos.x  = Mathf.Round(pos.x * 2) / 2f;
-        if (pc.current_direction == Direction.WEST && Mathf.Abs(vertical_input) > 0) pos.x  = Mathf.Round(pos.x * 2) / 2f;
-
-        pc.transform.position = pos;
-
-
-        //Set new direction
-        if (horizontal_input ==  1.0f) pc.current_direction = Direction.EAST;
-        if (horizontal_input == -1.0f) pc.current_direction = Direction.WEST;
-        if (vertical_input   ==  1.0f) pc.current_direction = Direction.NORTH;
-        if (vertical_input   == -1.0f) pc.current_direction = Direction.SOUTH;
+		
 
 
         /*if (horizontal_input == 1.0f) {
@@ -242,12 +221,38 @@ public class StateLinkNormalMovement : State {
 			}
 		}*/
 
-        pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, vertical_input, 0) 
-																			* pc.walking_velocity 
-																			* time_delta_fraction;
-		
-		if (Input.GetKeyDown (KeyCode.Z))
-			state_machine.ChangeState (new StateLinkAttack (pc, pc.selected_weapon_prefab, 15));
+        if (pc.current_state != EntityState.TRANSITION)
+        {
+            float horizontal_input = Input.GetAxis("Horizontal");
+            float vertical_input = Input.GetAxis("Vertical");
+
+            if (horizontal_input != 0.0f)
+            {
+                vertical_input = 0.0f;
+            }
+
+
+            Vector3 pos = pc.transform.position;
+            if (pc.current_direction == Direction.NORTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
+            if (pc.current_direction == Direction.SOUTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
+            if (pc.current_direction == Direction.EAST && Mathf.Abs(vertical_input) > 0) pos.x = Mathf.Round(pos.x * 2) / 2f;
+            if (pc.current_direction == Direction.WEST && Mathf.Abs(vertical_input) > 0) pos.x = Mathf.Round(pos.x * 2) / 2f;
+
+            pc.transform.position = pos;
+
+
+            //Set new direction
+            if (horizontal_input == 1.0f) pc.current_direction = Direction.EAST;
+            if (horizontal_input == -1.0f) pc.current_direction = Direction.WEST;
+            if (vertical_input == 1.0f) pc.current_direction = Direction.NORTH;
+            if (vertical_input == -1.0f) pc.current_direction = Direction.SOUTH;
+            pc.GetComponent<Rigidbody>().velocity = new Vector3(horizontal_input, vertical_input, 0)
+                                                                                * pc.walking_velocity
+                                                                                * time_delta_fraction;
+
+            if (Input.GetKeyDown(KeyCode.Z))
+                state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 15));
+        }
 			
 	}
 }
