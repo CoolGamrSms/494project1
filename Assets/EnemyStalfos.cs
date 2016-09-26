@@ -6,6 +6,7 @@ public class EnemyStalfos : MonoBehaviour {
     public Sprite[] animation;
     float animation_start_time;
     public int fps;
+    public Vector3 forward;
 
     public float walking_velocity;
     int cooldown;
@@ -31,7 +32,16 @@ public class EnemyStalfos : MonoBehaviour {
             {
                 changeDirection();
             }
+        RaycastHit hit;
 
+        Debug.DrawRay(transform.position, forward*2, Color.green);
+        if(Physics.Raycast(transform.position, forward*2, out hit))
+        {
+            if (hit.collider.gameObject.CompareTag("Map"))
+            {
+                if (hit.distance < 0.5f) changeDirection();
+            }
+        }
     }
 
     void changeDirection()
@@ -55,11 +65,9 @@ public class EnemyStalfos : MonoBehaviour {
             h *= -1f;
             v *= -1f;
         }
-        this.GetComponent<Rigidbody>().velocity = new Vector3(h, v) * walking_velocity;
+
+        forward = new Vector3(h, v);
+        this.GetComponent<Rigidbody>().velocity = forward * walking_velocity;
     }
 
-    void OnCollisionEnter()
-    {
-        changeDirection();
-    }
 }
