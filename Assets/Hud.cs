@@ -6,6 +6,7 @@ public class Hud : MonoBehaviour {
 
 	public Text rupee_text;
 	public Text heart_text;
+	public Text key_text;
 	// Use this for initialization
 	void Start () {
 	
@@ -18,6 +19,9 @@ public class Hud : MonoBehaviour {
 
 		int player_health = PlayerControl.instance.health;
 		heart_text.text = "Health: " + player_health.ToString ();
+
+		int player_keys = PlayerControl.instance.keys;
+		key_text.text = "Keys: " + player_keys.ToString ();
 		
 	}
 }
