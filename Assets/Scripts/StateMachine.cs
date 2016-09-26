@@ -335,7 +335,6 @@ public class StateLinkDamaged : State {
 	}
 	public override void OnStart() {
 		pc.current_state = EntityState.DAMAGED;
-		Debug.LogError ("Made it to Damaged State");
 		//renderer.material = null;
 		renderer.material.color = Color.red;
 	}
