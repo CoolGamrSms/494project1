@@ -23,6 +23,7 @@ public class PlayerControl : MonoBehaviour {
 	public int wallet = 0;
 	public int health = 3;
 	public int maxHealth = 3;
+	public int keys = 0;
 
 	public static PlayerControl instance;
 
@@ -64,6 +65,10 @@ public class PlayerControl : MonoBehaviour {
 		if (coll.gameObject.tag == "Rupee") {
 			Destroy (coll.gameObject);
 			wallet++;
+		}
+		else if(coll.gameObject.tag == "Key") {
+			Destroy (coll.gameObject);
+			keys++;
 		} else if (coll.gameObject.tag == "Heart") {
 			Destroy (coll.gameObject);
 			if (health < maxHealth) {
@@ -73,9 +78,13 @@ public class PlayerControl : MonoBehaviour {
 				}
 			}
 		} else if (coll.gameObject.tag == "Enemy") {
-
 			if (this.current_state != EntityState.DAMAGED) {
-				//Move link backwards
+				var magnitude = 5000;
+				// calculate force vector
+				var force = transform.position - coll.transform.position;
+				// normalize force vector to get direction only and trim magnitude
+				force.Normalize();
+				GetComponent<Rigidbody>().AddForce(force * magnitude);
 				this.current_state = EntityState.DAMAGED;
 				control_state_machine.ChangeState(new StateLinkDamaged(this, GetComponent<SpriteRenderer> (), 100));
 				health--;
