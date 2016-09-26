@@ -20,7 +20,8 @@ public class Explosion : MonoBehaviour {
 
 	void OnTriggerEnter(Collider coll) {
 		if (coll.tag == "Enemy") {
-			//Decrease Enemy health
+			//Enemy instance = coll.GetComponent ();
+			//instance.health -= 1
 		}
 	}
 }

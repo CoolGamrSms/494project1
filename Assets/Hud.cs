@@ -40,14 +40,13 @@ public class Hud : MonoBehaviour {
 
 		}
 		if (paused) {
-			if (Input.GetKeyDown (KeyCode.Z)) {
-				if (current_arrow == ArrowState.BOOMERANG) {
-					PlayerControl.instance.current_weapon = WeaponType.BOOMERANG;
-				} else if (current_arrow == ArrowState.BOMB) {
-					PlayerControl.instance.current_weapon = WeaponType.BOMBS;
-				} else {
-					PlayerControl.instance.current_weapon = WeaponType.BOW;
-				}
+
+			if (current_arrow == ArrowState.BOOMERANG) {
+				PlayerControl.instance.current_weapon = WeaponType.BOOMERANG;
+			} else if (current_arrow == ArrowState.BOMB) {
+				PlayerControl.instance.current_weapon = WeaponType.BOMBS;
+			} else {
+				PlayerControl.instance.current_weapon = WeaponType.BOW;
 			}
 			if (Input.GetKeyDown (KeyCode.RightArrow)) {
 				if (current_arrow == ArrowState.BOW)
