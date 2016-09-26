@@ -61,6 +61,44 @@ public class PlayerControl : MonoBehaviour {
 		GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, vertical_input, 0) * walking_velocity;*/
 	}
 
+    void OnCollisionEnter(Collision coll)
+    {
+        //Locked doors
+        if(coll.gameObject.CompareTag("Map"))
+        {
+            Tile c = coll.gameObject.GetComponent<Tile>();
+            if (c.tileNum == 81)
+            {
+                //North door
+                if (transform.position.x % 1f != 0.5f) return;
+                if (keys > 0) keys--;
+                else return;  
+                ShowMapOnCamera.MAP[c.x, c.y] = 93;
+                ShowMapOnCamera.MAP[c.x-1, c.y] = 92;
+                ShowMapOnCamera.S.RedrawScreen(true);
+                
+            }
+            else if(c.tileNum == 106)
+            {
+                //West door
+                if (transform.position.y % 1f != 0f) return;
+                if (keys > 0) keys--;
+                else return;
+                ShowMapOnCamera.MAP[c.x, c.y] = 51;
+                ShowMapOnCamera.S.RedrawScreen(true);
+            }
+            else if (c.tileNum == 101)
+            {
+                //East door
+                if (transform.position.y % 1f != 0f) return;
+                if (keys > 0) keys--;
+                else return;
+                ShowMapOnCamera.MAP[c.x, c.y] = 48;
+                ShowMapOnCamera.S.RedrawScreen(true);
+            }
+        }
+    }
+
 	void OnTriggerEnter(Collider coll) {
 		if (coll.gameObject.tag == "Rupee") {
 			Destroy (coll.gameObject);
@@ -86,6 +124,15 @@ public class PlayerControl : MonoBehaviour {
 
                 if(Vector3.Cross(myv, knockback) == Vector3.zero && Vector3.Dot(myv, knockback) > 0f) {
                     knockback *= -1f;
+                }
+
+                if(current_direction == Direction.WEST || current_direction == Direction.EAST)
+                {
+                    if (knockback.x > 0f) knockback.y = 0f;
+                }
+                if (current_direction == Direction.NORTH || current_direction == Direction.SOUTH)
+                {
+                    if (knockback.y > 0f) knockback.x = 0f;
                 }
 
                 GetComponent<Rigidbody>().velocity = knockback;
