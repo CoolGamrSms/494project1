@@ -3,6 +3,7 @@ using System.Collections;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
 public enum EntityState {NORMAL, ATTACKING, TRANSITION, DAMAGED};
+public enum WeaponType {BOMBS, BOW, BOOMERANG}
 
 public class PlayerControl : MonoBehaviour {
 
@@ -16,14 +17,17 @@ public class PlayerControl : MonoBehaviour {
 	
 	public EntityState current_state = EntityState.NORMAL;
 	public Direction current_direction = Direction.SOUTH;
+	public WeaponType current_weapon = WeaponType.BOMBS;
 
 	public GameObject selected_weapon_prefab;
+	public GameObject bomb;
 
 	public float walking_velocity = 1.0f;
 	public int wallet = 0;
 	public int health = 3;
 	public int maxHealth = 3;
 	public int keys = 0;
+	public bool paused = false;
 
 	public static PlayerControl instance;
 
@@ -52,6 +56,17 @@ public class PlayerControl : MonoBehaviour {
 			control_state_machine.ChangeState (new StateLinkNormalMovement (this));
 		}
 
+		if (Input.GetKeyDown (KeyCode.X)) {
+			if (current_weapon == WeaponType.BOMBS) {
+				Instantiate (bomb, this.transform.position, Quaternion.identity);
+			}
+			if (current_weapon == WeaponType.BOW) {
+				//Shoot arrow
+			}
+			if (current_weapon == WeaponType.BOOMERANG) {
+				//Throw boomerang
+			}
+		}
 
 		/*float horizontal_input = Input.GetAxis ("Horizontal");
 		float vertical_input = Input.GetAxis ("Vertical");

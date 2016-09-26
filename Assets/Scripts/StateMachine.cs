@@ -79,7 +79,7 @@ public class StateIdleWithSprite : State
 	{
 		renderer.sprite = sprite;
 	}
-	
+
 	public override void OnUpdate(float time_delta_fraction)
 	{
 		if(pc.current_state == EntityState.ATTACKING || pc.current_state == EntityState.TRANSITION)
@@ -130,7 +130,7 @@ public class StatePlayAnimationForHeldKey : State
 	
 	public override void OnUpdate(float time_delta_fraction)
 	{
-		if(pc.current_state == EntityState.ATTACKING || pc.current_state == EntityState.TRANSITION)
+		if(pc.current_state == EntityState.ATTACKING || pc.current_state == EntityState.TRANSITION || pc.paused)
 			return;
 
 		if(this.animation_length <= 0)
@@ -272,6 +272,9 @@ public class StateLinkAttack : State {
 	}
 
 	public override void OnStart() {
+		if (pc.paused)
+			return;
+		
 		pc.current_state = EntityState.ATTACKING;
 
 		pc.GetComponent<Rigidbody> ().velocity = Vector3.zero;
