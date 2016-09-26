@@ -27,6 +27,7 @@ public class PlayerControl : MonoBehaviour {
 	public int health = 3;
 	public int maxHealth = 3;
 	public int keys = 0;
+	public bool paused = false;
 
 	public static PlayerControl instance;
 
