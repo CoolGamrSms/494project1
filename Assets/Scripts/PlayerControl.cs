@@ -79,14 +79,21 @@ public class PlayerControl : MonoBehaviour {
 			}
 		} else if (coll.gameObject.tag == "Enemy") {
 			if (this.current_state != EntityState.DAMAGED) {
-				var magnitude = 5000;
-				// calculate force vector
-				var force = transform.position - coll.transform.position;
-				// normalize force vector to get direction only and trim magnitude
-				force.Normalize();
-				GetComponent<Rigidbody>().AddForce(force * magnitude);
-				this.current_state = EntityState.DAMAGED;
-				control_state_machine.ChangeState(new StateLinkDamaged(this, GetComponent<SpriteRenderer> (), 100));
+
+                Vector3 myv = GetComponent<Rigidbody>().velocity;
+
+                Vector3 knockback = coll.gameObject.GetComponent<Rigidbody>().velocity * 5;
+
+                if(Vector3.Cross(myv, knockback) == Vector3.zero && Vector3.Dot(myv, knockback) > 0f) {
+                    knockback *= -1f;
+                }
+
+                GetComponent<Rigidbody>().velocity = knockback;
+
+                control_state_machine.ChangeState(new StateLinkDamaged(this, GetComponent<SpriteRenderer>(), 40, knockback != Vector3.zero));
+
+                this.current_state = EntityState.DAMAGED;
+				
 				health--;
 			}
 			if (health <= 0) {

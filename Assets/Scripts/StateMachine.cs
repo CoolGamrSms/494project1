@@ -325,11 +325,13 @@ public class StateLinkDamaged : State {
 	float cooldown = 0.0f;
 	//Material m;
 	Color32 c;
+    bool knockback;
 
-	public StateLinkDamaged(PlayerControl pc, SpriteRenderer renderer, int cooldown) {
+	public StateLinkDamaged(PlayerControl pc, SpriteRenderer renderer, int cooldown, bool knockback) {
 		this.pc = pc;
 		this.cooldown = cooldown;
 		this.renderer = renderer;
+        this.knockback = knockback;
 		//this.m = renderer.material;
 		this.c = renderer.material.color;
 	}
@@ -340,46 +342,58 @@ public class StateLinkDamaged : State {
 	}
 
 	public override void OnUpdate(float time_delta_fraction) {
+        if(knockback == true && pc.GetComponent<Rigidbody>().velocity == Vector3.zero)
+        {
+            knockback = false;
+        }
 		if (pc.current_state != EntityState.TRANSITION)
 		{
-			float horizontal_input = Input.GetAxis("Horizontal");
-			float vertical_input = Input.GetAxis("Vertical");
+            if (pc.current_state != EntityState.TRANSITION && !knockback)
+            {
+                float horizontal_input = Input.GetAxis("Horizontal");
+                float vertical_input = Input.GetAxis("Vertical");
 
-			if (horizontal_input != 0.0f)
-			{
-				vertical_input = 0.0f;
-			}
-
-
-			Vector3 pos = pc.transform.position;
-			if (pc.current_direction == Direction.NORTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
-			if (pc.current_direction == Direction.SOUTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
-			if (pc.current_direction == Direction.EAST && Mathf.Abs(vertical_input) > 0) pos.x = Mathf.Round(pos.x * 2) / 2f;
-			if (pc.current_direction == Direction.WEST && Mathf.Abs(vertical_input) > 0) pos.x = Mathf.Round(pos.x * 2) / 2f;
-
-			pc.transform.position = pos;
+                if (horizontal_input != 0.0f)
+                {
+                    vertical_input = 0.0f;
+                }
 
 
-			//Set new direction
-			if (horizontal_input == 1.0f) pc.current_direction = Direction.EAST;
-			if (horizontal_input == -1.0f) pc.current_direction = Direction.WEST;
-			if (vertical_input == 1.0f) pc.current_direction = Direction.NORTH;
-			if (vertical_input == -1.0f) pc.current_direction = Direction.SOUTH;
-			pc.GetComponent<Rigidbody>().velocity = new Vector3(horizontal_input, vertical_input, 0)
-				* pc.walking_velocity
-				* time_delta_fraction;
+                Vector3 pos = pc.transform.position;
+                if (pc.current_direction == Direction.NORTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
+                if (pc.current_direction == Direction.SOUTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
+                if (pc.current_direction == Direction.EAST && Mathf.Abs(vertical_input) > 0) pos.x = Mathf.Round(pos.x * 2) / 2f;
+                if (pc.current_direction == Direction.WEST && Mathf.Abs(vertical_input) > 0) pos.x = Mathf.Round(pos.x * 2) / 2f;
 
-			if (Input.GetKeyDown(KeyCode.Z))
-				state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 15));
+                pc.transform.position = pos;
 
-			//Material m = renderer.material;
-			//Color32 c = renderer.material.color;
-			//renderer.material = null;
-			//renderer.material.color = Color.red;
-			//renderer.material = m;
-			//renderer.material.color = c;  
-		}
+
+                //Set new direction
+                if (horizontal_input == 1.0f) pc.current_direction = Direction.EAST;
+                if (horizontal_input == -1.0f) pc.current_direction = Direction.WEST;
+                if (vertical_input == 1.0f) pc.current_direction = Direction.NORTH;
+                if (vertical_input == -1.0f) pc.current_direction = Direction.SOUTH;
+                pc.GetComponent<Rigidbody>().velocity = new Vector3(horizontal_input, vertical_input, 0)
+                                                                                    * pc.walking_velocity
+                                                                                    * time_delta_fraction;
+
+                if (Input.GetKeyDown(KeyCode.Z))
+                    state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 15));
+            }
+
+            //Material m = renderer.material;
+            //Color32 c = renderer.material.color;
+            //renderer.material = null;
+            //renderer.material.color = Color.red;
+            //renderer.material = m;
+            //renderer.material.color = c;  
+        }
 		cooldown -= time_delta_fraction;
+        if(knockback && cooldown <=20)
+        {
+            knockback = false;
+            pc.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
 		if(cooldown <=0) {
 			ConcludeState ();
 		}
