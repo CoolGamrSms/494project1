@@ -17,4 +17,10 @@ public class Explosion : MonoBehaviour {
 		int current_frame_index = ((int)((Time.time - animation_start_time) / (1.0 / fps)) % animation.Length);
 		GetComponent<SpriteRenderer>().sprite = animation[current_frame_index];
 	}
+
+	void OnTriggerEnter(Collider coll) {
+		if (coll.tag == "Enemy") {
+			//Decrease Enemy health
+		}
+	}
 }
