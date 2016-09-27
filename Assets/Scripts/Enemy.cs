@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyStalfos : MonoBehaviour {
+public abstract class Enemy : MonoBehaviour {
 
     public Sprite[] animation;
     float animation_start_time;
@@ -15,14 +15,18 @@ public class EnemyStalfos : MonoBehaviour {
     Color c;
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
         animation_start_time = Time.time;
         c = GetComponent<SpriteRenderer>().material.color;
-        changeDirection();
 	}
+
+    public void knockbackEnd()
+    {
+        GetComponent<SpriteRenderer>().material.color = c;
+    }
 	
 	// Update is called once per frame
-	void Update () {
+	public void Update () {
         if(knockback > 0f)
         {
             knockback -= Time.deltaTime / (1.0f / Application.targetFrameRate);
@@ -38,62 +42,17 @@ public class EnemyStalfos : MonoBehaviour {
                 }
             }
 
-            if (knockback <= 0f) changeDirection();
+            if (knockback <= 0f) knockbackEnd();
             return;
         }
         //Animation
         int current_frame_index = ((int)((Time.time - animation_start_time) / (1.0 / fps)) % animation.Length);
         GetComponent<SpriteRenderer>().sprite = animation[current_frame_index];
-
-        //Movement
-        if (cooldown > 0) --cooldown;
-        if (Mathf.Round(transform.position.x * 10f) / 10f % 1.0f == 0)
-        if (Mathf.Round(transform.position.y * 10f) / 10f % 1.0f == 0)
-        if (cooldown == 0)
-            {
-                changeDirection();
-            }
-        RaycastHit hit;
-
-        Debug.DrawRay(transform.position, forward*2, Color.green);
-        if(Physics.Raycast(transform.position, forward*2, out hit))
-        {
-            if (hit.collider.gameObject.CompareTag("Map"))
-            {
-                if (hit.distance < 0.5f) changeDirection();
-            }
-        }
     }
 
-    void changeDirection()
-    {
-        GetComponent<SpriteRenderer>().material.color = c;
-        this.gameObject.tag = "Enemy";
-        cooldown = 100;
-        //Snap to the grid
-        Vector3 pos = transform.position;
-        pos.x = Mathf.Round(pos.x);
-        pos.y = Mathf.Round(pos.y);
-        transform.position = pos;
 
-        //Pick a random direction
-        float v, h = Mathf.Round(Random.Range(0f, 1f));
 
-        if (h == 0f) v = 1f;
-        else        v = 0f;
-
-        int flip = Random.Range(0, 2);
-        if(flip == 1)
-        {
-            h *= -1f;
-            v *= -1f;
-        }
-
-        forward = new Vector3(h, v);
-        this.GetComponent<Rigidbody>().velocity = forward * walking_velocity;
-    }
-
-    void OnTriggerEnter(Collider coll)
+    public void OnTriggerEnter(Collider coll)
     {
         if (knockback > 0f) return;
         if(coll.gameObject.CompareTag("Sword"))
@@ -116,7 +75,7 @@ public class EnemyStalfos : MonoBehaviour {
                 if (PlayerControl.instance.current_direction == Direction.WEST) forward = new Vector3(-1f, 0f);
                 if (PlayerControl.instance.current_direction == Direction.SOUTH) forward = new Vector3(0f, -1f);
                 if (PlayerControl.instance.current_direction == Direction.NORTH) forward = new Vector3(0f, 1f);
-                this.GetComponent<Rigidbody>().velocity = forward *walking_velocity* 5;
+                this.GetComponent<Rigidbody>().velocity = forward * 10f;
 
                 //Set timer
                 knockback = 15f;
