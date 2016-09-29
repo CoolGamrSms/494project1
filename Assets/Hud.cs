@@ -28,13 +28,13 @@ public class Hud : MonoBehaviour {
 				Time.timeScale = 1;
 				paused = false;
 				PlayerControl.instance.paused = false;
-				Vector3 temp = new Vector3 (0, 45, 0);
+				Vector3 temp = new Vector3 (0, 80, 0);
 				this.gameObject.transform.position += temp;
 			} else {
 				Time.timeScale = 0;
 				paused = true;
 				PlayerControl.instance.paused = true;
-				Vector3 temp = new Vector3 (0, 45, 0);
+				Vector3 temp = new Vector3 (0, 80, 0);
 				this.gameObject.transform.position -= temp;
 			}
 

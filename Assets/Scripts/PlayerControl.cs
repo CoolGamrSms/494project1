@@ -11,6 +11,10 @@ public class PlayerControl : MonoBehaviour {
 	public Sprite[] link_run_up;
 	public Sprite[] link_run_right;
 	public Sprite[] link_run_left;
+	public Sprite link_attack_up;
+	public Sprite link_attack_down;
+	public Sprite link_attack_left;
+	public Sprite link_attack_right;
 
 	StateMachine animation_state_machine;
 	StateMachine control_state_machine;
@@ -21,6 +25,7 @@ public class PlayerControl : MonoBehaviour {
 
 	public GameObject selected_weapon_prefab;
 	public GameObject bomb;
+	public GameObject boomerang;
 
 	public float walking_velocity = 1.0f;
 	public int wallet = 0;
@@ -64,7 +69,7 @@ public class PlayerControl : MonoBehaviour {
 				//Shoot arrow
 			}
 			if (current_weapon == WeaponType.BOOMERANG) {
-				//Throw boomerang
+				Instantiate (boomerang, this.transform.position, Quaternion.identity);
 			}
 		}
 
@@ -115,6 +120,7 @@ public class PlayerControl : MonoBehaviour {
     }
 
 	void OnTriggerEnter(Collider coll) {
+
 		if (coll.gameObject.tag == "Rupee") {
 			Destroy (coll.gameObject);
 			wallet++;

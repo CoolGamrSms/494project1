@@ -14,8 +14,11 @@ public abstract class Enemy : MonoBehaviour {
     public float knockback = 0f;
     Color c;
 
+	public static Enemy instance;
+
 	// Use this for initialization
 	public void Start () {
+		instance = this;
         animation_start_time = Time.time;
         c = GetComponent<SpriteRenderer>().material.color;
 	}
@@ -55,7 +58,7 @@ public abstract class Enemy : MonoBehaviour {
     public void OnTriggerEnter(Collider coll)
     {
         if (knockback > 0f) return;
-        if(coll.gameObject.CompareTag("Sword"))
+		if(coll.gameObject.CompareTag("Sword") || coll.gameObject.CompareTag("Explosion") || coll.gameObject.CompareTag("Boomerang"))
         {
             health--;
             if(health <= 0)
