@@ -1,11 +1,12 @@
 fileFormatVersion: 2
 guid: 55920bb86cd304ab091df4224edfd796
-timeCreated: 1474858586
+timeCreated: 1475109304
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: NES - The Legend of Zelda - Link_0
     21300002: NES - The Legend of Zelda - Link_1
+    21300004: Explosions_0
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -75,6 +76,19 @@ TextureImporter:
         y: 117
         width: 46
         height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Explosions_0
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 137
+        width: 14
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

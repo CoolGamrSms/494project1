@@ -86,6 +86,10 @@ public class Tile : MonoBehaviour {
             bc.center = new Vector3(0.25f, 0, 0);
             bc.size = new Vector3(0.5f, 1, 1);
             break;
+		case 'T'://Statues that boomerang can fly over
+			bc.center = Vector3.zero;
+			bc.size = Vector3.one;
+			break;
         case 'P': // Pushable
 		//Make pushable
 		break;
