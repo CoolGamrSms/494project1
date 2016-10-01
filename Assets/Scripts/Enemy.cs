@@ -28,8 +28,6 @@ public abstract class Enemy : MonoBehaviour {
         //Determine what room boundaries are
         roomX = Mathf.Floor((transform.position.x - 2) / 16f) * 16f + 2f;
         roomY = Mathf.Floor((transform.position.y - 2) / 11f) * 11f + 2f;
-        Debug.Log(roomX);
-        Debug.Log(roomY);
 
         if (isOnScreen()) StartMovement();
         else stopped = true;
