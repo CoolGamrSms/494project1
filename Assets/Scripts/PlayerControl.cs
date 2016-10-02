@@ -87,6 +87,7 @@ public class PlayerControl : MonoBehaviour {
         if(coll.gameObject.CompareTag("Map"))
         {
             Tile c = coll.gameObject.GetComponent<Tile>();
+            if (c == null) return;
             if (c.tileNum == 81)
             {
                 //North door
@@ -139,7 +140,7 @@ public class PlayerControl : MonoBehaviour {
 		} else if (coll.gameObject.tag == "Enemy") {
 			if (this.current_state != EntityState.DAMAGED) {
 
-                Vector3 myv = GetComponent<Rigidbody>().velocity;
+                /*Vector3 myv = GetComponent<Rigidbody>().velocity;
 
                 Vector3 knockback = coll.gameObject.GetComponent<Rigidbody>().velocity * 5;
 
@@ -156,9 +157,9 @@ public class PlayerControl : MonoBehaviour {
                     if (knockback.y > 0f) knockback.x = 0f;
                 }
 
-                GetComponent<Rigidbody>().velocity = knockback;
+                GetComponent<Rigidbody>().velocity = knockback;*/
 
-                control_state_machine.ChangeState(new StateLinkDamaged(this, GetComponent<SpriteRenderer>(), 40, knockback != Vector3.zero));
+                control_state_machine.ChangeState(new StateLinkDamaged(this, GetComponent<SpriteRenderer>(), 40, false));
 
                 this.current_state = EntityState.DAMAGED;
 				

@@ -93,7 +93,7 @@ public class RoomTransition : MonoBehaviour {
         }
         else if(current_state == EntityState.TRANSITION)
         {
-            tween += 0.01f;
+            tween += 0.006f;
             if(tween >= 1f)
             {
                 transform.position = goalPos;
