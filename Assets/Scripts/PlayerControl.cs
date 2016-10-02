@@ -24,6 +24,7 @@ public class PlayerControl : MonoBehaviour {
 	public WeaponType current_weapon = WeaponType.BOMBS;
 
 	public GameObject selected_weapon_prefab;
+	public GameObject bow;
 	public GameObject bomb;
 	public GameObject boomerang;
 

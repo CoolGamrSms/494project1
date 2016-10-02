@@ -56,7 +56,8 @@ public class Boomerang : MonoBehaviour {
 		m_distanceTraveled = (Time.time - startTime) * speed;
 		if (done) {
 
-			StartCoroutine(moveTo(PlayerControl.instance.transform.position));
+			//StartCoroutine(moveTo(PlayerControl.instance.transform.position));
+			transform.position = Vector3.MoveTowards (transform.position, PlayerControl.instance.transform.position , speed * Time.deltaTime);
 			if (this.transform.position == PlayerControl.instance.transform.position) {
 				Destroy (this.gameObject);
 			}
@@ -64,12 +65,24 @@ public class Boomerang : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider coll) {
-		if (coll.gameObject.CompareTag ("Enemy")) {
+		//Debug.Log ("Hit something");
+		if (coll.gameObject.CompareTag ("EnemyHurt") || coll.gameObject.CompareTag ("Enemy")) {
+			Debug.Log ("Hit Enemy");
 			m_distanceTraveled = 5.1f;
 			this.GetComponent<Rigidbody> ().velocity = Vector3.zero;
 			done = true;
-			StartCoroutine(moveTo(PlayerControl.instance.transform.position));
+			transform.position = Vector3.MoveTowards (transform.position, PlayerControl.instance.transform.position , speed * Time.deltaTime);
 			if (this.transform.position == PlayerControl.instance.transform.position) {
+				Destroy (this.gameObject);
+			}
+		}
+	}
+
+	void OnCollisionEnter(Collision coll){
+		if (coll.collider.tag == "Map") {
+			Tile b = coll.gameObject.GetComponent<Tile>();
+			char c = ShowMapOnCamera.S.collisionS[b.tileNum];
+			if (c == 'S' || c == 'T') {
 				Destroy (this.gameObject);
 			}
 		}

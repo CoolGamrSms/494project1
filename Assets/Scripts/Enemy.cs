@@ -58,7 +58,7 @@ public abstract class Enemy : MonoBehaviour {
     public void OnTriggerEnter(Collider coll)
     {
         if (knockback > 0f) return;
-		if(coll.gameObject.CompareTag("Sword") || coll.gameObject.CompareTag("Explosion") || coll.gameObject.CompareTag("Boomerang"))
+		if(coll.gameObject.CompareTag("Sword") || coll.gameObject.CompareTag("Explosion") || coll.gameObject.CompareTag("Boomerang") || coll.gameObject.CompareTag("Arrow"))
         {
             health--;
             if(health <= 0)

@@ -254,6 +254,8 @@ public class StateLinkNormalMovement : State {
 
             if (Input.GetKeyDown(KeyCode.Z))
                 state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 15));
+			if (Input.GetKeyDown(KeyCode.X) && pc.current_weapon == WeaponType.BOW)
+				state_machine.ChangeState(new StateLinkAttack(pc, pc.bow, 7));
         }
 			
 	}
@@ -264,11 +266,14 @@ public class StateLinkAttack : State {
 	GameObject weapon_prefab;
 	GameObject weapon_instance;
 	float cooldown = 0.0f;
+	float distance = 1.0f;
 
 	public StateLinkAttack(PlayerControl pc, GameObject weapon_prefab, int cooldown) {
 		this.pc = pc;
 		this.weapon_prefab = weapon_prefab;
 		this.cooldown = cooldown;
+		if (weapon_prefab == pc.bow)
+			distance = 0.5f;
 	}
 
 	public override void OnStart() {
@@ -285,20 +290,24 @@ public class StateLinkAttack : State {
 		Vector3 direction_eulerangle = Vector3.zero;
 
 		if(pc.current_direction == Direction.NORTH) {
-			direction_offset = new Vector3 (0, 1, 0);
+			direction_offset = new Vector3 (0, distance, 0);
 			direction_eulerangle = new Vector3 (0, 0, 90);
+			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_attack_up;
 		}
 		else if(pc.current_direction == Direction.EAST) {
-			direction_offset = new Vector3 (1, 0, 0);
+			direction_offset = new Vector3 (distance, 0, 0);
 			direction_eulerangle = new Vector3 (0, 0, 0);
+			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_attack_right;
 		}
 		else if(pc.current_direction == Direction.SOUTH) {
-			direction_offset = new Vector3 (0, -1, 0);
+			direction_offset = new Vector3 (0, distance * -1, 0);
 			direction_eulerangle = new Vector3 (0, 0, 270);
+			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_attack_down;
 		}
 		else if(pc.current_direction == Direction.WEST) {
-			direction_offset = new Vector3 (-1, 0, 0);
+			direction_offset = new Vector3 (distance * -1, 0, 0);
 			direction_eulerangle = new Vector3 (0, 0, 180);
+			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_attack_left;
 		}
 			
 		weapon_instance.transform.position += direction_offset;
@@ -316,6 +325,22 @@ public class StateLinkAttack : State {
 	}
 
 	public override void OnFinish (){
+		if(pc.current_direction == Direction.NORTH) {
+
+			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_run_up[0];
+		}
+		else if(pc.current_direction == Direction.EAST) {
+
+			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_run_right[0];
+		}
+		else if(pc.current_direction == Direction.SOUTH) {
+
+			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_run_down[0];
+		}
+		else if(pc.current_direction == Direction.WEST) {
+
+			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_run_left[0];
+		}
 		pc.current_state = EntityState.NORMAL;
 		//state_machine.ChangeState(new StateLinkNormalMovement(pc));
 		MonoBehaviour.Destroy (weapon_instance);
