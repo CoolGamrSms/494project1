@@ -19,6 +19,10 @@ public abstract class Enemy : MonoBehaviour
     bool stopped;
 	public bool boss = false;
 
+    static GameObject BombPrefab;
+    static GameObject HeartPrefab;
+    static GameObject RupeePrefab;
+
     float roomX, roomY;
 
     // Use this for initialization
@@ -32,6 +36,13 @@ public abstract class Enemy : MonoBehaviour
         isKnockback = false;
         stopped = false;
         stunned = false;
+
+        if(BombPrefab == null)
+        {
+            BombPrefab = (GameObject)Resources.Load("BombPickup", typeof(GameObject));
+            RupeePrefab = (GameObject)Resources.Load("rupee", typeof(GameObject));
+            HeartPrefab = (GameObject)Resources.Load("heart", typeof(GameObject));
+        }
 
         //Determine what room boundaries are
         roomX = Mathf.Floor((transform.position.x - 2) / 16f) * 16f + 2f;
@@ -87,6 +98,17 @@ public abstract class Enemy : MonoBehaviour
 
     public void Kill()
     {
+        if(!boss && Mathf.Floor(Random.Range(0f, 4f)) == 0f)
+        {
+            //Drop a random item
+            float item = Random.Range(0, 3);
+            GameObject selectedPrefab;
+            if (item == 0) selectedPrefab = BombPrefab;
+            else if (item == 1) selectedPrefab = RupeePrefab;
+            else selectedPrefab = HeartPrefab;
+            GameObject go = (GameObject)Instantiate(selectedPrefab);
+            go.transform.position = transform.position;
+        }
         Destroy(this.gameObject);
     }
 

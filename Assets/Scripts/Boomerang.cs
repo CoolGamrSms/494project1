@@ -99,7 +99,45 @@ public class Boomerang : MonoBehaviour {
 				Destroy (this.gameObject);
 			}
 		}
-	}
+        if (coll.gameObject.tag == "Rupee")
+        {
+            Destroy(coll.gameObject);
+            PlayerControl.instance.wallet++;
+            SFXScript.S.ItemObtain();
+        }
+        else if (coll.gameObject.tag == "Key")
+        {
+            Destroy(coll.gameObject);
+            PlayerControl.instance.keys++;
+            SFXScript.S.ItemObtain();
+        }
+        else if (coll.gameObject.tag == "BombPickup")
+        {
+            Destroy(coll.gameObject);
+            PlayerControl.instance.bombs++;
+            SFXScript.S.ItemObtain();
+        }
+        else if (coll.gameObject.tag == "Heart")
+        {
+            Destroy(coll.gameObject);
+            SFXScript.S.ItemObtain();
+            if (PlayerControl.instance.health < PlayerControl.instance.maxHealth)
+            {
+                PlayerControl.instance.health += 2;
+                if (PlayerControl.instance.health > PlayerControl.instance.maxHealth)
+                {
+                    PlayerControl.instance.health = PlayerControl.instance.maxHealth;
+                }
+            }
+        }
+        else if (coll.gameObject.tag == "Container")
+        {
+            Destroy(coll.gameObject);
+            PlayerControl.instance.maxHealth += 2;
+            PlayerControl.instance.health = PlayerControl.instance.maxHealth;
+            SFXScript.S.ItemObtain();
+        }
+    }
 
     public virtual bool CheckCollision()
     {

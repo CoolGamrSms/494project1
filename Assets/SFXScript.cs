@@ -15,7 +15,7 @@ public class SFXScript : MonoBehaviour {
     public static SFXScript S;
 	// Use this for initialization
 	void Awake () {
-        S = this;
+        if(S == null) S = this;
 	}
 	
 	// Update is called once per frame

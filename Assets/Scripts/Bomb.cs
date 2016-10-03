@@ -17,6 +17,10 @@ public class Bomb : MonoBehaviour {
             {
                 if(hitColliders[i].gameObject.GetComponent<Enemy>() != null) hitColliders[i].gameObject.GetComponent<Enemy>().Hurt();
             }
+            if(hitColliders[i].gameObject.CompareTag("Bombhole"))
+            {
+                hitColliders[i].gameObject.GetComponent<Renderer>().enabled = true;
+            }
             i++;
         }
 

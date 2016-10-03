@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
 public enum EntityState {NORMAL, ATTACKING, TRANSITION, DAMAGED};
@@ -73,15 +74,17 @@ public class PlayerControl : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.F1)) {
             invincible = !invincible;
-		}
+            if (invincible) GetComponent<SpriteRenderer>().color = Color.cyan;
+            else GetComponent<SpriteRenderer>().color = Color.white;
+        }
 
 		if (Input.GetKeyDown(KeyCode.F5)) { 
-			Application.LoadLevel("Dungeon");
+			SceneManager.LoadScene("Dungeon");
 		}
 
-		if (Input.GetKeyDown(KeyCode.F6)) { 
-			Application.LoadLevel("Custom");
-		}
+		if (Input.GetKeyDown(KeyCode.F6)) {
+            SceneManager.LoadScene("Custom");
+        }
         if (cooldown > 0)
         {
             cooldown -= Time.deltaTime;
@@ -89,7 +92,7 @@ public class PlayerControl : MonoBehaviour {
             {
                 cooldown = 0f;
                 if(current_state == EntityState.DAMAGED) current_state = EntityState.NORMAL;
-                GetComponent<SpriteRenderer>().color = Color.white;
+                if(!invincible) GetComponent<SpriteRenderer>().color = Color.white;
             }
         }
 		animation_state_machine.Update ();
@@ -196,12 +199,13 @@ public class PlayerControl : MonoBehaviour {
         }
 		else if (coll.gameObject.tag == "Heart") {
 			Destroy (coll.gameObject);
-			if (health < maxHealth) {
+            SFXScript.S.ItemObtain();
+            if (health < maxHealth) {
 				health+=2;
 				if (health > maxHealth) {
 					health = maxHealth;
 				}
-                SFXScript.S.ItemObtain();
+                
             }
 		} else if (coll.gameObject.tag == "Container") {
 			Destroy (coll.gameObject);
@@ -284,7 +288,7 @@ public class PlayerControl : MonoBehaviour {
 				if (!invincible) health--;
 			}
 			if (health <= 0) {
-				Application.LoadLevel("Intro");
+				SceneManager.LoadScene("Intro");
 			}
 		}
 	}
