@@ -277,7 +277,7 @@ public class PlayerControl : MonoBehaviour {
 				if (!invincible) health--;
 			}
 			if (health <= 0) {
-				//death scene
+				Application.LoadLevel("Intro");
 			}
 		}
 	}
