@@ -2,26 +2,18 @@
 using System.Collections;
 
 public class Explosion : MonoBehaviour {
-	public Sprite[] animation;
-	float animation_start_time;
-	public int fps;
 
+    float Fade;
 	// Use this for initialization
 	void Start () {
-		animation_start_time = Time.time;
-		Destroy (this.gameObject, 2.0f);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		int current_frame_index = ((int)((Time.time - animation_start_time) / (1.0 / fps)) % animation.Length);
-		GetComponent<SpriteRenderer>().sprite = animation[current_frame_index];
+		Destroy (this.gameObject, 1.0f);
+        Fade = -0.4f;
 	}
 
-	void OnTriggerEnter(Collider coll) {
-		if (coll.tag == "Enemy") {
-			Enemy instance = coll.GetComponent<Enemy> ();
-			//instance.health -= 1;
-		}
-	}
+    void Update()
+    {
+        Fade += Time.deltaTime;
+        foreach(SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>()) 
+            sr.color = new Color(1f, 1f, 1f, Random.Range(0.6f-Fade, 1f-Fade));
+    }
 }

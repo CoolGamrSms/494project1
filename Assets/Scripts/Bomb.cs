@@ -7,17 +7,28 @@ public class Bomb : MonoBehaviour {
 	//GameObject explosion;
 	public GameObject explosion;
 
-	IEnumerator WaitForExplosion() {
+	void WaitForExplosion() {
+        //Deal damage
+        Collider[] hitColliders = Physics.OverlapBox(transform.position, Vector3.one*1.5f);
+        int i = 0;
+        while (i < hitColliders.Length)
+        {
+            if(hitColliders[i].gameObject.CompareTag("Enemy"))
+            {
+                hitColliders[i].gameObject.GetComponent<Enemy>().Hurt();
+            }
+            i++;
+        }
 
-		yield return new WaitForSeconds(2);
-		Destroy (this.gameObject);
+        //Make pretty explosion
+        Destroy (this.gameObject);
 		GameObject go = Instantiate(explosion, this.transform.position, Quaternion.identity) as GameObject;
 	}
 
 	// Use this for initialization
 	void Start () {
 
-		StartCoroutine (WaitForExplosion ());
+		Invoke("WaitForExplosion", 1.5f);
 
 	}
 

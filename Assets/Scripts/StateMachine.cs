@@ -78,7 +78,23 @@ public class StateIdleWithSprite : State
 	public override void OnStart()
 	{
 		renderer.sprite = sprite;
-	}
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 7, KeyCode.DownArrow));
+        }
+        else if (Input.GetKey(KeyCode.UpArrow))
+        {
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 7, KeyCode.UpArrow));
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 7, KeyCode.RightArrow));
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 7, KeyCode.LeftArrow));
+        }
+    }
 
 	public override void OnUpdate(float time_delta_fraction)
 	{
@@ -126,7 +142,7 @@ public class StatePlayAnimationForHeldKey : State
 	public override void OnStart()
 	{
 		animation_start_time = Time.time;
-	}
+    }
 	
 	public override void OnUpdate(float time_delta_fraction)
 	{
@@ -144,17 +160,39 @@ public class StatePlayAnimationForHeldKey : State
 		renderer.sprite = animation[current_frame_index];
 
         // If another key is pressed, we need to transition to a different walking animation.
-        if(Input.GetKeyDown(KeyCode.DownArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 7, KeyCode.DownArrow));
-		else if(Input.GetKeyDown(KeyCode.UpArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 7, KeyCode.UpArrow));
-		else if(Input.GetKeyDown(KeyCode.RightArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 7, KeyCode.RightArrow));
-		else if(Input.GetKeyDown(KeyCode.LeftArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 7, KeyCode.LeftArrow));
-		// If we detect the specified key has been released, return to the idle state.
-		else if(!Input.GetKey(key))
-			state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, animation[1]));
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 7, KeyCode.DownArrow));
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 7, KeyCode.UpArrow));
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 7, KeyCode.RightArrow));
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 7, KeyCode.LeftArrow));
+        // If we detect the specified key has been released, return to the idle state.
+        else if (!Input.GetKey(key))
+        {
+                if (Input.GetKey(KeyCode.DownArrow))
+                {
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 7, KeyCode.DownArrow));
+                }
+                else if (Input.GetKey(KeyCode.UpArrow))
+                {
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 7, KeyCode.UpArrow));
+                }
+                else if (Input.GetKey(KeyCode.RightArrow))
+                {
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 7, KeyCode.RightArrow));
+                }
+                else if (Input.GetKey(KeyCode.LeftArrow))
+                {
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 7, KeyCode.LeftArrow));
+                }
+                else
+                {
+                    state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, animation[1]));
+                }
+        }
+			
     }
 }
 
@@ -174,7 +212,35 @@ public class StateLinkNormalMovement : State {
 		this.pc = pc;
 	}
 
-	public override void OnUpdate(float time_delta_fraction) {
+    public override void OnStart()
+    {
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            pc.vertical_input = -1f;
+            pc.horizontal_input = 0f;
+        }
+        else if (Input.GetKey(KeyCode.UpArrow))
+        {
+            pc.vertical_input = 1f;
+            pc.horizontal_input = 0f;
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            pc.vertical_input = 0f;
+            pc.horizontal_input = 1f;
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            pc.vertical_input = 0f;
+            pc.horizontal_input = -1f;
+        }
+        else
+        {
+            pc.vertical_input = 0f;
+            pc.horizontal_input = 0f;
+        }
+    }
+    public override void OnUpdate(float time_delta_fraction) {
 		
 
 
@@ -223,17 +289,62 @@ public class StateLinkNormalMovement : State {
 			}
 		}*/
 
-        if (pc.current_state != EntityState.TRANSITION)
-        {
-            float horizontal_input = Input.GetAxis("Horizontal");
-            float vertical_input = Input.GetAxis("Vertical");
+            float horizontal_input = pc.horizontal_input;
+            float vertical_input = pc.vertical_input;
 
-            if (horizontal_input != 0.0f)
+            if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                vertical_input = 0.0f;
+                vertical_input = -1f;
+                horizontal_input = 0f;
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                vertical_input = 1f;
+                horizontal_input = 0f;
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                vertical_input = 0f;
+                horizontal_input = 1f;
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                vertical_input = 0f;
+                horizontal_input = -1f;
+            }
+            if(Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow)) {
+                if (Input.GetKey(KeyCode.DownArrow))
+                {
+                    vertical_input = -1f;
+                    horizontal_input = 0f;
+                }
+                else if (Input.GetKey(KeyCode.UpArrow))
+                {
+                    vertical_input = 1f;
+                    horizontal_input = 0f;
+                }
+                else if (Input.GetKey(KeyCode.RightArrow))
+                {
+                    vertical_input = 0f;
+                    horizontal_input = 1f;
+                }
+                else if (Input.GetKey(KeyCode.LeftArrow))
+                {
+                    vertical_input = 0f;
+                    horizontal_input = -1f;
+                }
+                else
+                {
+                    vertical_input = 0f;
+                    horizontal_input = 0f;
+                }
             }
 
+            pc.horizontal_input = horizontal_input;
+            pc.vertical_input = vertical_input;
 
+            if (pc.current_state != EntityState.TRANSITION)
+            {
             Vector3 pos = pc.transform.position;
             if (pc.current_direction == Direction.NORTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
             if (pc.current_direction == Direction.SOUTH && Mathf.Abs(horizontal_input) > 0) pos.y = Mathf.Round(pos.y * 2) / 2f;
@@ -252,10 +363,32 @@ public class StateLinkNormalMovement : State {
                                                                                 * pc.walking_velocity
                                                                                 * time_delta_fraction;
 
-            if (Input.GetKeyDown(KeyCode.Z))
-                state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 15));
-			if (Input.GetKeyDown(KeyCode.X) && pc.current_weapon == WeaponType.BOW)
-				state_machine.ChangeState(new StateLinkAttack(pc, pc.bow, 7));
+            if ((pc.transform.position.x - 2f) % 16f > 11.1f) { }
+            else if ((pc.transform.position.y - 1.9f) % 11f > 6.65f) { }
+            else {
+                if (Input.GetKeyDown(KeyCode.A))
+                    state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 15, pc.magic_prefab));
+
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    if (pc.current_weapon == WeaponType.BOMBS)
+                    {
+                        pc.DropBomb();
+                    }
+                    if (pc.current_weapon == WeaponType.BOW)
+                    {
+                        if (pc.wallet > 0)
+                        {
+                            pc.wallet--;
+                            state_machine.ChangeState(new StateLinkAttack(pc, pc.bow, 7));
+                        }
+                    }
+                    if (pc.current_weapon == WeaponType.BOOMERANG)
+                    {
+                        pc.ThrowBoomerang();
+                    }
+                }
+            }
         }
 			
 	}
@@ -264,57 +397,73 @@ public class StateLinkNormalMovement : State {
 public class StateLinkAttack : State {
 	PlayerControl pc;
 	GameObject weapon_prefab;
+    GameObject magic_prefab;
 	GameObject weapon_instance;
 	float cooldown = 0.0f;
 	float distance = 1.0f;
 
-	public StateLinkAttack(PlayerControl pc, GameObject weapon_prefab, int cooldown) {
+	public StateLinkAttack(PlayerControl pc, GameObject weapon_prefab, int cooldown, GameObject magic_prefab = null) {
 		this.pc = pc;
 		this.weapon_prefab = weapon_prefab;
 		this.cooldown = cooldown;
+        this.magic_prefab = magic_prefab;
 		if (weapon_prefab == pc.bow)
 			distance = 0.5f;
 	}
 
-	public override void OnStart() {
-		if (pc.paused)
-			return;
-		
-		pc.current_state = EntityState.ATTACKING;
+    public override void OnStart() {
+        if (pc.paused)
+            return;
 
-		pc.GetComponent<Rigidbody> ().velocity = Vector3.zero;
+        pc.current_state = EntityState.ATTACKING;
 
-		weapon_instance = MonoBehaviour.Instantiate (weapon_prefab, pc.transform.position, Quaternion.identity) as GameObject;
+        pc.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
-		Vector3 direction_offset = Vector3.zero;
-		Vector3 direction_eulerangle = Vector3.zero;
+        weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, pc.transform.position, Quaternion.identity) as GameObject;
+        bool shootingSword = false;
+        if (magic_prefab != null && pc.magic_instance == null && pc.health == pc.maxHealth)
+        {
+            shootingSword = true;
+            pc.magic_instance = MonoBehaviour.Instantiate(magic_prefab, pc.transform.position, Quaternion.identity) as GameObject;
+        }
 
-		if(pc.current_direction == Direction.NORTH) {
-			direction_offset = new Vector3 (0, distance, 0);
-			direction_eulerangle = new Vector3 (0, 0, 90);
-			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_attack_up;
-		}
-		else if(pc.current_direction == Direction.EAST) {
-			direction_offset = new Vector3 (distance, 0, 0);
-			direction_eulerangle = new Vector3 (0, 0, 0);
-			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_attack_right;
-		}
-		else if(pc.current_direction == Direction.SOUTH) {
-			direction_offset = new Vector3 (0, distance * -1, 0);
-			direction_eulerangle = new Vector3 (0, 0, 270);
-			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_attack_down;
-		}
-		else if(pc.current_direction == Direction.WEST) {
-			direction_offset = new Vector3 (distance * -1, 0, 0);
-			direction_eulerangle = new Vector3 (0, 0, 180);
-			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_attack_left;
-		}
-			
-		weapon_instance.transform.position += direction_offset;
-		Quaternion new_weapon_rotation = new Quaternion ();
-		new_weapon_rotation.eulerAngles = direction_eulerangle;
-		weapon_instance.transform.rotation = new_weapon_rotation;
-	}
+        Vector3 direction_offset = Vector3.zero;
+        Vector3 direction_eulerangle = Vector3.zero;
+
+        if (pc.current_direction == Direction.NORTH) {
+            direction_offset = new Vector3(0, distance, 0);
+            direction_eulerangle = new Vector3(0, 0, 90);
+            pc.GetComponent<SpriteRenderer>().sprite = pc.link_attack_up;
+        }
+        else if (pc.current_direction == Direction.EAST) {
+            direction_offset = new Vector3(distance, 0, 0);
+            direction_eulerangle = new Vector3(0, 0, 0);
+            pc.GetComponent<SpriteRenderer>().sprite = pc.link_attack_right;
+        }
+        else if (pc.current_direction == Direction.SOUTH) {
+            direction_offset = new Vector3(0, distance * -1, 0);
+            direction_eulerangle = new Vector3(0, 0, 270);
+            pc.GetComponent<SpriteRenderer>().sprite = pc.link_attack_down;
+        }
+        else if (pc.current_direction == Direction.WEST) {
+            direction_offset = new Vector3(distance * -1, 0, 0);
+            direction_eulerangle = new Vector3(0, 0, 180);
+            pc.GetComponent<SpriteRenderer>().sprite = pc.link_attack_left;
+        }
+
+        weapon_instance.transform.position += direction_offset;
+        Quaternion new_weapon_rotation = new Quaternion();
+        new_weapon_rotation.eulerAngles = direction_eulerangle;
+        weapon_instance.transform.rotation = new_weapon_rotation;
+
+        if (shootingSword)
+        {
+            pc.magic_instance.transform.position += direction_offset;
+            pc.magic_instance.transform.rotation = new_weapon_rotation;
+            pc.magic_instance.GetComponent<Rigidbody>().velocity = direction_offset * 10f;
+        }
+
+    }
 
 	public override void OnUpdate(float time_delta_fraction) {
 		pc.GetComponent<Rigidbody> ().velocity = Vector3.zero;
@@ -327,27 +476,28 @@ public class StateLinkAttack : State {
 	public override void OnFinish (){
 		if(pc.current_direction == Direction.NORTH) {
 
-			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_run_up[0];
-		}
+            pc.animation_state_machine.ChangeState(new StateIdleWithSprite(pc, pc.GetComponent<SpriteRenderer>(), pc.link_run_up[0]));
+        }
 		else if(pc.current_direction == Direction.EAST) {
 
-			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_run_right[0];
-		}
+            pc.animation_state_machine.ChangeState(new StateIdleWithSprite(pc, pc.GetComponent<SpriteRenderer>(), pc.link_run_right[0]));
+        }
 		else if(pc.current_direction == Direction.SOUTH) {
 
-			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_run_down[0];
-		}
+            pc.animation_state_machine.ChangeState(new StateIdleWithSprite(pc, pc.GetComponent<SpriteRenderer>(), pc.link_run_down[0]));
+        }
 		else if(pc.current_direction == Direction.WEST) {
 
-			pc.GetComponent<SpriteRenderer> ().sprite = pc.link_run_left[0];
-		}
-		pc.current_state = EntityState.NORMAL;
+            pc.animation_state_machine.ChangeState(new StateIdleWithSprite(pc, pc.GetComponent<SpriteRenderer>(), pc.link_run_left[0]));
+        }
+        
+        pc.current_state = EntityState.NORMAL;
 		//state_machine.ChangeState(new StateLinkNormalMovement(pc));
 		MonoBehaviour.Destroy (weapon_instance);
 	}
 }
 
-public class StateLinkDamaged : State {
+/*public class StateLinkDamaged : State {
 	PlayerControl pc;
 	SpriteRenderer renderer;
 	float cooldown = 0.0f;
@@ -404,9 +554,12 @@ public class StateLinkDamaged : State {
                 pc.GetComponent<Rigidbody>().velocity = new Vector3(horizontal_input, vertical_input, 0)
                                                                                     * pc.walking_velocity
                                                                                     * time_delta_fraction;
-
-                if (Input.GetKeyDown(KeyCode.Z))
-                    state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 15));
+                if ((pc.transform.position.x - 2f) % 16f > 11.1f) { }
+                else if ((pc.transform.position.y - 2f) % 11f > 6.55f) { }
+                else {
+                    if (Input.GetKeyDown(KeyCode.Z))
+                        state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 15, pc.magic_prefab));
+                }
             }
 
             //Material m = renderer.material;
@@ -433,4 +586,4 @@ public class StateLinkDamaged : State {
 		//renderer.material = m;
 		renderer.material.color = c; 
 	}
-}
+}*/

@@ -6,12 +6,15 @@ public abstract class Enemy : MonoBehaviour
 
     public Sprite[] animation;
     public int health = 1;
+    int maxHealth;
     float animation_start_time;
     protected int fps;
+    bool stunned;
+    Vector3 pauseVelocity;
 
     Color c;
 
-    bool isHurt;
+    public bool isHurt;
     bool isKnockback;
     bool stopped;
 
@@ -21,11 +24,13 @@ public abstract class Enemy : MonoBehaviour
     public void Start()
     {
         //Initialize values
+        maxHealth = health;
         animation_start_time = Time.time;
         c = GetComponent<SpriteRenderer>().material.color;
         isHurt = false;
         isKnockback = false;
         stopped = false;
+        stunned = false;
 
         //Determine what room boundaries are
         roomX = Mathf.Floor((transform.position.x - 2) / 16f) * 16f + 2f;
@@ -47,14 +52,35 @@ public abstract class Enemy : MonoBehaviour
         transform.position = pos;
     }
 
+    public bool isBoomerangable()
+    {
+        return maxHealth == 1;
+    }
+
     public void Hurt()
     {
         if (isHurt) return;
         isHurt = true;
+        stunned = false;
         GetComponent<SpriteRenderer>().material.color = Color.red;
         health--;
         if (health <= 0) Kill();
         else Invoke("EndHurt", 0.5f);
+    }
+
+    public void Stun()
+    {
+        if(!stunned) pauseVelocity = GetComponent<Rigidbody>().velocity;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        stunned = true;
+        CancelInvoke("EndStun");
+        Invoke("EndStun", 1f);
+    }
+
+    public void EndStun()
+    {
+        stunned = false;
+        GetComponent<Rigidbody>().velocity = pauseVelocity;
     }
 
     public void Kill()
@@ -117,34 +143,35 @@ public abstract class Enemy : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-
-        if (!stopped)
+        if (!stunned)
         {
-            if (!isOnScreen())
+            if (!stopped)
             {
-                stopped = true;
-                GetComponent<Rigidbody>().velocity = Vector3.zero;
-                SnapGrid();
+                if (!isOnScreen())
+                {
+                    stopped = true;
+                    GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    SnapGrid();
+                    return;
+                }
+            }
+
+            if (stopped)
+            {
+                if (isOnScreen())
+                {
+                    stopped = false;
+                    StartMovement();
+                }
                 return;
             }
-        }
 
-        if (stopped)
-        {
-            if (isOnScreen())
+            if (isKnockback)
             {
-                stopped = false;
-                StartMovement();
+                if (CheckCollision()) EndKnockback();
             }
-            return;
+            else UpdateMovement();
         }
-
-        if (isKnockback)
-        {
-            if (CheckCollision()) EndKnockback();
-        }
-        else UpdateMovement();
-
         //Animation
         int current_frame_index;
         if (fps == 0) current_frame_index = 0;
@@ -156,11 +183,32 @@ public abstract class Enemy : MonoBehaviour
 
     public void OnTriggerEnter(Collider coll)
     {
-        if (coll.gameObject.CompareTag("Sword") || coll.gameObject.CompareTag("Explosion") || coll.gameObject.CompareTag("Boomerang"))
+        if (coll.gameObject.CompareTag("Sword") || coll.gameObject.CompareTag("MagicSword"))
         {
             Hurt();
-            Knockback(Vector3.left);
+            Vector3 v = Vector3.zero;
+            if (coll.gameObject.transform.rotation.eulerAngles == new Vector3(0, 0, 90)) v = Vector3.up;
+            if (coll.gameObject.transform.rotation.eulerAngles == new Vector3(0, 0, 0)) v = Vector3.right;
+            if (coll.gameObject.transform.rotation.eulerAngles == new Vector3(0, 0, 270)) v = Vector3.down;
+            if (coll.gameObject.transform.rotation.eulerAngles == new Vector3(0, 0, 180)) v = Vector3.left;
+            Knockback(v);
+
+            if(coll.gameObject.CompareTag("MagicSword"))
+            {
+                coll.gameObject.GetComponent<MagicSword>().Kill();
+            }
         }
+        if(coll.gameObject.CompareTag("Boomerang"))
+        {
+            if (isBoomerangable()) Hurt();
+            else Stun();
+        }
+        if(coll.gameObject.CompareTag("Arrow"))
+        {
+            Destroy(coll.gameObject);
+            Hurt();
+        }
+
     }
 
 }

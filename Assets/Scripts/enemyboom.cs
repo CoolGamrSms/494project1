@@ -7,6 +7,7 @@ public class enemyboom : MonoBehaviour {
     public bool reversed;
     float roomX, roomY;
     public Vector3 start;
+    bool alreadyHit = false;
 
     // Use this for initialization
     void Start () {
@@ -17,6 +18,23 @@ public class enemyboom : MonoBehaviour {
         roomY = Mathf.Floor((transform.position.y - 2) / 11f) * 11f + 2f;
     }
 	
+    public void SetHit()
+    {
+        alreadyHit = true;
+    }
+
+    public bool WasHit()
+    {
+        return alreadyHit;
+    }
+
+    public void Reverse(bool hit=false)
+    {
+        if(hit) alreadyHit = true;
+        if (reversed) return;
+        reversed = true;
+        GetComponent<Rigidbody>().velocity *= -1f;
+    }
 	// Update is called once per frame
 	void Update () {
         this.transform.Rotate(Vector3.forward, Time.deltaTime * rotation);
@@ -25,13 +43,11 @@ public class enemyboom : MonoBehaviour {
         {
             if (CheckCollision())
             {
-                reversed = true;
-                GetComponent<Rigidbody>().velocity *= -1f;
+                Reverse();
             }
             else if(Vector3.Distance(start, transform.position)>5f)
             {
-                reversed = true;
-                GetComponent<Rigidbody>().velocity *= -1f;
+                Reverse();
             }
         }
         else if (Vector3.Distance(start, transform.position) < 0.5f)

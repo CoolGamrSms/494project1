@@ -89,7 +89,6 @@ public class bladetrap : MonoBehaviour {
         goal = start;
         float mult = ((v == BladeTrapVertical.UP) ? -1f : 1f);
         goal.y += 2.5f * mult;
-        Debug.Log(goal);
         float mag = 6f * mult;
         GetComponent<Rigidbody>().velocity = new Vector3(0, mag);
     }

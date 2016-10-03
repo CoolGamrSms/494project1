@@ -16,17 +16,22 @@ public class PlayerControl : MonoBehaviour {
 	public Sprite link_attack_left;
 	public Sprite link_attack_right;
 
-	StateMachine animation_state_machine;
-	StateMachine control_state_machine;
+    public float horizontal_input, vertical_input;
+
+	public StateMachine animation_state_machine;
+	public StateMachine control_state_machine;
 	
 	public EntityState current_state = EntityState.NORMAL;
 	public Direction current_direction = Direction.SOUTH;
 	public WeaponType current_weapon = WeaponType.BOMBS;
 
 	public GameObject selected_weapon_prefab;
-	public GameObject bow;
+    public GameObject magic_prefab;
+    public GameObject magic_instance;
+    public GameObject bow;
 	public GameObject bomb;
 	public GameObject boomerang;
+    GameObject myBoomerang;
 
 	public float walking_velocity = 1.0f;
 	public int wallet = 0;
@@ -34,6 +39,7 @@ public class PlayerControl : MonoBehaviour {
 	public int maxHealth = 3;
 	public int keys = 0;
 	public bool paused = false;
+    public float cooldown;
 
 	public static PlayerControl instance;
 
@@ -54,24 +60,22 @@ public class PlayerControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if (cooldown > 0)
+        {
+            cooldown -= Time.deltaTime;
+            if (cooldown <= 0)
+            {
+                cooldown = 0f;
+                if(current_state == EntityState.DAMAGED) current_state = EntityState.NORMAL;
+                GetComponent<SpriteRenderer>().color = Color.white;
+            }
+        }
 		animation_state_machine.Update ();
 
 		control_state_machine.Update ();
 
 		if (control_state_machine.IsFinished ()) {
 			control_state_machine.ChangeState (new StateLinkNormalMovement (this));
-		}
-
-		if (Input.GetKeyDown (KeyCode.X)) {
-			if (current_weapon == WeaponType.BOMBS) {
-				Instantiate (bomb, this.transform.position, Quaternion.identity);
-			}
-			if (current_weapon == WeaponType.BOW) {
-				//Shoot arrow
-			}
-			if (current_weapon == WeaponType.BOOMERANG) {
-				Instantiate (boomerang, this.transform.position, Quaternion.identity);
-			}
 		}
 
 		/*float horizontal_input = Input.GetAxis ("Horizontal");
@@ -81,6 +85,24 @@ public class PlayerControl : MonoBehaviour {
 		}
 		GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, vertical_input, 0) * walking_velocity;*/
 	}
+
+    public void DropBomb()
+    {
+        Vector3 pos = transform.position;
+        pos.x = Mathf.Round(pos.x * 2) / 2f;
+        pos.y = Mathf.Round(pos.y * 2) / 2f;
+        if (current_direction == Direction.NORTH) pos.y += 1.2f;
+        if (current_direction == Direction.EAST) { pos.x += 1; pos.y += 0.2f; }
+        if (current_direction == Direction.SOUTH) pos.y -= 0.8f;
+        if (current_direction == Direction.WEST) { pos.x -= 1; pos.y += 0.2f; }
+        Instantiate(bomb, pos, Quaternion.identity);
+    }
+
+    public void ThrowBoomerang()
+    {
+        if (myBoomerang != null) return;
+        myBoomerang = (GameObject)Instantiate(boomerang, transform.position, Quaternion.identity);
+    }
 
     void OnCollisionEnter(Collision coll)
     {
@@ -140,7 +162,25 @@ public class PlayerControl : MonoBehaviour {
 			}
 		} else if (coll.gameObject.tag == "Enemy") {
 			if (this.current_state != EntityState.DAMAGED) {
+                if (coll.gameObject.GetComponent<Enemy>() != null && coll.gameObject.GetComponent<Enemy>().isHurt) return;
 
+                //Shield blocking for enemy boomerangs
+                if(coll.gameObject.GetComponent<enemyboom>() != null)
+                {
+                    if (coll.gameObject.GetComponent<enemyboom>().WasHit()) return;
+                    Vector3 v = coll.gameObject.GetComponent<Rigidbody>().velocity;
+                    if(this.current_state == EntityState.NORMAL)
+                    {
+                        if ((v.x < 0f && this.current_direction == Direction.EAST) ||
+                         (v.x > 0f && this.current_direction == Direction.WEST) ||
+                         (v.y < 0f && this.current_direction == Direction.NORTH) ||
+                         (v.y > 0f && this.current_direction == Direction.SOUTH)) {
+                            coll.gameObject.GetComponent<enemyboom>().Reverse(true);
+                            return;
+                        }
+                        coll.gameObject.GetComponent<enemyboom>().SetHit();
+                    }
+                }
                 /*Vector3 myv = GetComponent<Rigidbody>().velocity;
 
                 Vector3 knockback = coll.gameObject.GetComponent<Rigidbody>().velocity * 5;
@@ -160,11 +200,13 @@ public class PlayerControl : MonoBehaviour {
 
                 GetComponent<Rigidbody>().velocity = knockback;*/
 
-                control_state_machine.ChangeState(new StateLinkDamaged(this, GetComponent<SpriteRenderer>(), 40, false));
+                cooldown = 0.5f;
 
                 this.current_state = EntityState.DAMAGED;
-				
-				health--;
+
+                GetComponent<SpriteRenderer>().color = Color.red;
+
+                health--;
 			}
 			if (health <= 0) {
 				//death scene

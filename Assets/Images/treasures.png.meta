@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: 09ef0ac224c624350a53eb1e89af6918
-timeCreated: 1475085192
+guid: 6f98afd45dc6a4e2bac190c17f2577ce
+timeCreated: 1475085308
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: boomerangSprite_0
+    21300000: NES - The Legend of Zelda - Treasures_0
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -30,7 +30,7 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: -1
+    filterMode: 0
     aniso: 16
     mipBias: -1
     wrapMode: 1
@@ -45,7 +45,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 20
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
@@ -54,13 +54,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: boomerangSprite_0
+      name: NES - The Legend of Zelda - Treasures_0
       rect:
         serializedVersion: 2
-        x: 345
-        y: 228
-        width: 115
-        height: 186
+        x: 129
+        y: 109
+        width: 5
+        height: 8
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
