@@ -171,6 +171,7 @@ public class PlayerControl : MonoBehaviour {
 			}
 		} else if (coll.gameObject.tag == "Container") {
 			Destroy (coll.gameObject);
+			Debug.Log ("Destroyed Heart Container");
 			maxHealth++;
 			health = maxHealth;
 		} else if (coll.gameObject.tag == "Bow") {
@@ -185,7 +186,7 @@ public class PlayerControl : MonoBehaviour {
 			Equipped.AddBow ();
 			Panel.AddBow ();
 			select.AddBow ();
-		} else if (coll.gameObject.tag == "Boomerang") {
+		} else if (coll.gameObject.tag == "BoomPickup") {
 			Destroy (coll.gameObject);
 			Debug.Log ("Boom Entered");
 			rupee_text.AddBoomerang ();

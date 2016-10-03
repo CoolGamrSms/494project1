@@ -15,7 +15,7 @@ public class Hud : MonoBehaviour {
 	public bool bowAdded = false;
 	public bool paused = false;
 
-	enum ArrowState {BOOMERANG,BOW, BOMB}
+	enum ArrowState {BOOMERANG, BOW, BOMB}
 
 	ArrowState current_arrow = ArrowState.BOMB;
 	// Use this for initialization

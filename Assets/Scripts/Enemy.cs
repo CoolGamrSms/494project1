@@ -17,6 +17,7 @@ public abstract class Enemy : MonoBehaviour
     public bool isHurt;
     bool isKnockback;
     bool stopped;
+	public bool boss = false;
 
     float roomX, roomY;
 
@@ -90,6 +91,8 @@ public abstract class Enemy : MonoBehaviour
 
     public void Knockback(Vector3 direction)
     {
+		if (boss)
+			return;
         direction /= direction.sqrMagnitude;
         if (isKnockback) return;
         isKnockback = true;
