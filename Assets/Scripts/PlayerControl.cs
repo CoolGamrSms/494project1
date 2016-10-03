@@ -48,6 +48,7 @@ public class PlayerControl : MonoBehaviour {
 	public int health = 6;
 	public int maxHealth = 6;
 	public int keys = 0;
+	public int bombs = 0;
 	public bool paused = false;
     public float cooldown;
 
@@ -98,14 +99,25 @@ public class PlayerControl : MonoBehaviour {
 
     public void DropBomb()
     {
-        Vector3 pos = transform.position;
-        pos.x = Mathf.Round(pos.x * 2) / 2f;
-        pos.y = Mathf.Round(pos.y * 2) / 2f;
-        if (current_direction == Direction.NORTH) pos.y += 1.2f;
-        if (current_direction == Direction.EAST) { pos.x += 1; pos.y += 0.2f; }
-        if (current_direction == Direction.SOUTH) pos.y -= 0.8f;
-        if (current_direction == Direction.WEST) { pos.x -= 1; pos.y += 0.2f; }
-        Instantiate(bomb, pos, Quaternion.identity);
+		if (bombs >= 1) {
+			Vector3 pos = transform.position;
+			pos.x = Mathf.Round (pos.x * 2) / 2f;
+			pos.y = Mathf.Round (pos.y * 2) / 2f;
+			if (current_direction == Direction.NORTH)
+				pos.y += 1.2f;
+			if (current_direction == Direction.EAST) {
+				pos.x += 1;
+				pos.y += 0.2f;
+			}
+			if (current_direction == Direction.SOUTH)
+				pos.y -= 0.8f;
+			if (current_direction == Direction.WEST) {
+				pos.x -= 1;
+				pos.y += 0.2f;
+			}
+			Instantiate (bomb, pos, Quaternion.identity);
+			bombs--;
+		}
     }
 
     public void ThrowBoomerang()
@@ -161,7 +173,11 @@ public class PlayerControl : MonoBehaviour {
 		} else if (coll.gameObject.tag == "Key") {
 			Destroy (coll.gameObject);
 			keys++;
-		} else if (coll.gameObject.tag == "Heart") {
+		} else if (coll.gameObject.tag == "BombPickup") {
+			Destroy (coll.gameObject);
+			bombs++;
+		}
+		else if (coll.gameObject.tag == "Heart") {
 			Destroy (coll.gameObject);
 			if (health < maxHealth) {
 				health+=2;

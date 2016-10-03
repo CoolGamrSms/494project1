@@ -11,6 +11,7 @@ public class Hud : MonoBehaviour {
 	public Text boom_select;
 	public Text bow_select;
 	public Text Equipped;
+	public Text bomb_text;
 	public bool boomAdded = false;
 	public bool bowAdded = false;
 	public bool paused = false;
@@ -101,6 +102,9 @@ public class Hud : MonoBehaviour {
 
 		string eq = PlayerControl.instance.current_weapon.ToString ();
 		Equipped.text = "Equipped: " + eq;
+
+		int player_bombs = PlayerControl.instance.bombs;
+		bomb_text.text = "Bombs: " + player_bombs;
 		
 	}
 

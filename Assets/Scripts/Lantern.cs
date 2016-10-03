@@ -33,14 +33,21 @@ public class Lantern : MonoBehaviour {
 		}
 		if (partner.tag == "LitLantern" && this.tag == "LitLantern" && !stayslit) {
 			stayslit = true;
-			Debug.Log ("Made It");
-			if (doorX < this.transform.position.x) {
+			if (ShowMapOnCamera.MAP [doorX + 1, doorY] == 29) {
+				ShowMapOnCamera.MAP [doorX, doorY] = 51;
+				ShowMapOnCamera.S.RedrawScreen (true);
+			}
+			if (ShowMapOnCamera.MAP [doorX - 1, doorY] == 29) {
+				ShowMapOnCamera.MAP [doorX, doorY] = 48;
+				ShowMapOnCamera.S.RedrawScreen (true);
+			}
+			/*if (doorX < this.transform.position.x) {
 				ShowMapOnCamera.MAP [doorX, doorY] = 51;
 				ShowMapOnCamera.S.RedrawScreen (true);
 			} else {
 				ShowMapOnCamera.MAP [doorX, doorY] = 48;
 				ShowMapOnCamera.S.RedrawScreen (true);
-			}
+			}*/
 			stayslit = true;
 		}
 	}
