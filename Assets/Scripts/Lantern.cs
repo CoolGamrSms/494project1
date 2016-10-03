@@ -34,8 +34,13 @@ public class Lantern : MonoBehaviour {
 		if (partner.tag == "LitLantern" && this.tag == "LitLantern" && !stayslit) {
 			stayslit = true;
 			Debug.Log ("Made It");
-			ShowMapOnCamera.MAP[doorX, doorY] = 51;
-			ShowMapOnCamera.S.RedrawScreen(true);
+			if (doorX < this.transform.position.x) {
+				ShowMapOnCamera.MAP [doorX, doorY] = 51;
+				ShowMapOnCamera.S.RedrawScreen (true);
+			} else {
+				ShowMapOnCamera.MAP [doorX, doorY] = 48;
+				ShowMapOnCamera.S.RedrawScreen (true);
+			}
 			stayslit = true;
 		}
 	}

@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Keese : Enemy
 {
-
+	public bool boss1 = false;
+	bool closed = false;
     float cooldown, dur, timer, deg;
     Vector3 direction;
 
@@ -31,6 +32,15 @@ public class Keese : Enemy
 
     public override void UpdateMovement()
     {
+
+		if (boss1 && PlayerControl.instance.transform.position.y > 12.7f && !closed) { 
+			ShowMapOnCamera.MAP[72, 12] = 018;
+			ShowMapOnCamera.MAP[72, 11] = 002;
+			ShowMapOnCamera.MAP[71, 12] = 018;
+			ShowMapOnCamera.MAP[71, 11] = 002;
+			ShowMapOnCamera.S.RedrawScreen(true);
+			closed = true;
+		}
         float time_delta_fraction = Time.deltaTime / (1.0f / Application.targetFrameRate);
         timer += time_delta_fraction;
         cooldown -= time_delta_fraction;
