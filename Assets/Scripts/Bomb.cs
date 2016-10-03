@@ -27,8 +27,8 @@ public class Bomb : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
-		Invoke("WaitForExplosion", 1.5f);
+        SFXScript.S.BombSound();
+        Invoke("WaitForExplosion", 1f);
 
 	}
 

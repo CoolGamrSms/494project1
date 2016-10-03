@@ -61,6 +61,7 @@ public abstract class Enemy : MonoBehaviour
     public void Hurt()
     {
         if (isHurt) return;
+        SFXScript.S.EnemyHit();
         isHurt = true;
         stunned = false;
         GetComponent<SpriteRenderer>().material.color = Color.red;

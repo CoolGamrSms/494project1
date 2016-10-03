@@ -27,6 +27,7 @@ public class PushableBlock : MonoBehaviour {
             {
                 ShowMapOnCamera.MAP[doorX, doorY] = 51;
                 ShowMapOnCamera.S.RedrawScreen(true);
+                SFXScript.S.OpenDoor();
                 complete = true;
             }
         }

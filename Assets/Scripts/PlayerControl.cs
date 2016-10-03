@@ -72,10 +72,7 @@ public class PlayerControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.F1)) {
-			if (invincible)
-				invincible = false;
-			else
-				invincible = true;
+            invincible = !invincible;
 		}
 
 		if (Input.GetKeyDown(KeyCode.F5)) { 
@@ -156,6 +153,7 @@ public class PlayerControl : MonoBehaviour {
                 ShowMapOnCamera.MAP[c.x, c.y] = 93;
                 ShowMapOnCamera.MAP[c.x-1, c.y] = 92;
                 ShowMapOnCamera.S.RedrawScreen(true);
+                SFXScript.S.OpenDoor();
                 
             }
             else if(c.tileNum == 106)
@@ -166,6 +164,7 @@ public class PlayerControl : MonoBehaviour {
                 else return;
                 ShowMapOnCamera.MAP[c.x, c.y] = 51;
                 ShowMapOnCamera.S.RedrawScreen(true);
+                SFXScript.S.OpenDoor();
             }
             else if (c.tileNum == 101)
             {
@@ -175,6 +174,7 @@ public class PlayerControl : MonoBehaviour {
                 else return;
                 ShowMapOnCamera.MAP[c.x, c.y] = 48;
                 ShowMapOnCamera.S.RedrawScreen(true);
+                SFXScript.S.OpenDoor();
             }
         }
     }
@@ -184,13 +184,16 @@ public class PlayerControl : MonoBehaviour {
 		if (coll.gameObject.tag == "Rupee") {
 			Destroy (coll.gameObject);
 			wallet++;
-		} else if (coll.gameObject.tag == "Key") {
+            SFXScript.S.ItemObtain();
+        } else if (coll.gameObject.tag == "Key") {
 			Destroy (coll.gameObject);
 			keys++;
-		} else if (coll.gameObject.tag == "BombPickup") {
+            SFXScript.S.ItemObtain();
+        } else if (coll.gameObject.tag == "BombPickup") {
 			Destroy (coll.gameObject);
 			bombs++;
-		}
+            SFXScript.S.ItemObtain();
+        }
 		else if (coll.gameObject.tag == "Heart") {
 			Destroy (coll.gameObject);
 			if (health < maxHealth) {
@@ -198,12 +201,14 @@ public class PlayerControl : MonoBehaviour {
 				if (health > maxHealth) {
 					health = maxHealth;
 				}
-			}
+                SFXScript.S.ItemObtain();
+            }
 		} else if (coll.gameObject.tag == "Container") {
 			Destroy (coll.gameObject);
             		maxHealth += 2;
 			health = maxHealth;
-		} else if (coll.gameObject.tag == "Bow") {
+            SFXScript.S.ItemObtain();
+        } else if (coll.gameObject.tag == "Bow") {
 			Destroy (coll.gameObject);
 			Debug.Log ("Bow Entered");
 			rupee_text.AddBow ();
@@ -215,7 +220,8 @@ public class PlayerControl : MonoBehaviour {
 			Equipped.AddBow ();
 			Panel.AddBow ();
 			select.AddBow ();
-		} else if (coll.gameObject.tag == "BoomPickup") {
+            SFXScript.S.ItemReceive();
+        } else if (coll.gameObject.tag == "BoomPickup") {
 			Destroy (coll.gameObject);
 			Debug.Log ("Boom Entered");
 			rupee_text.AddBoomerang ();
@@ -227,7 +233,8 @@ public class PlayerControl : MonoBehaviour {
 			Equipped.AddBoomerang ();
 			Panel.AddBoomerang ();
 			select.AddBoomerang ();
-		}
+            SFXScript.S.ItemReceive();
+        }
 		else if (coll.gameObject.tag == "Enemy") {
 			if (this.current_state != EntityState.DAMAGED) {
                 if (coll.gameObject.GetComponent<Enemy>() != null && coll.gameObject.GetComponent<Enemy>().isHurt) return;
@@ -271,8 +278,8 @@ public class PlayerControl : MonoBehaviour {
                 cooldown = 0.5f;
 
                 this.current_state = EntityState.DAMAGED;
-
-                GetComponent<SpriteRenderer>().color = Color.red;
+                if (!invincible) SFXScript.S.PlayerHit();
+                if(!invincible) GetComponent<SpriteRenderer>().color = Color.red;
 
 				if (!invincible) health--;
 			}
