@@ -51,6 +51,7 @@ public class PlayerControl : MonoBehaviour {
 	public int bombs = 0;
 	public bool paused = false;
     public float cooldown;
+	bool invincible = false;
 
 	public static PlayerControl instance;
 
@@ -70,7 +71,20 @@ public class PlayerControl : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (Input.GetKeyDown(KeyCode.F1)) {
+			if (invincible)
+				invincible = false;
+			else
+				invincible = true;
+		}
 
+		if (Input.GetKeyDown(KeyCode.F5)) { 
+			Application.LoadLevel("Dungeon");
+		}
+
+		if (Input.GetKeyDown(KeyCode.F6)) { 
+			Application.LoadLevel("Custom");
+		}
         if (cooldown > 0)
         {
             cooldown -= Time.deltaTime;
@@ -260,7 +274,7 @@ public class PlayerControl : MonoBehaviour {
 
                 GetComponent<SpriteRenderer>().color = Color.red;
 
-                health--;
+				if (!invincible) health--;
 			}
 			if (health <= 0) {
 				//death scene
