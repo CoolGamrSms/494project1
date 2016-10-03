@@ -11,11 +11,13 @@ public class Hud : MonoBehaviour {
 	public Text boom_select;
 	public Text bow_select;
 	public Text Equipped;
+	public bool boomAdded = false;
+	public bool bowAdded = false;
 	public bool paused = false;
 
 	enum ArrowState {BOOMERANG,BOW, BOMB}
 
-	ArrowState current_arrow = ArrowState.BOOMERANG;
+	ArrowState current_arrow = ArrowState.BOMB;
 	// Use this for initialization
 	void Start () {
 	
@@ -23,7 +25,7 @@ public class Hud : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.RightShift)) {
+		if (Input.GetKeyDown (KeyCode.Return)) {
 			if (paused) {
 				Time.timeScale = 1;
 				paused = false;
@@ -49,28 +51,40 @@ public class Hud : MonoBehaviour {
 				PlayerControl.instance.current_weapon = WeaponType.BOW;
 			}
 			if (Input.GetKeyDown (KeyCode.RightArrow)) {
-				if (current_arrow == ArrowState.BOW)
+				if (current_arrow == ArrowState.BOW && boomAdded)
 					current_arrow = ArrowState.BOOMERANG;
 				else
 					current_arrow = ArrowState.BOMB;
 			}
 			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-				if (current_arrow == ArrowState.BOMB)
+				if (current_arrow == ArrowState.BOMB && boomAdded)
 					current_arrow = ArrowState.BOOMERANG;
-				else
+				else if (bowAdded)
 					current_arrow = ArrowState.BOW;
 			}
 			if (current_arrow == ArrowState.BOMB) {
 				bomb_select.text = "> Bombs";
-				boom_select.text = "Boomerang";
-				bow_select.text = "Bow";					
+				if (boomAdded)
+					boom_select.text = "Boomerang";
+				else
+					boom_select.text = "";
+				if (bowAdded) 
+					bow_select.text = "Bow";
+				else
+					bow_select.text = "";
 			} else if (current_arrow == ArrowState.BOOMERANG) {
 				bomb_select.text = "Bombs";
 				boom_select.text = "> Boomerang";
-				bow_select.text = "Bow";
+				if (bowAdded)
+					bow_select.text = "Bow";
+				else
+					bow_select.text = "";
 			} else {
 				bomb_select.text = "Bombs";
-				boom_select.text = "Boomerang";
+				if (boomAdded)
+					boom_select.text = "Boomerang";
+				else
+					boom_select.text = "";
 				bow_select.text = "> Bow";
 			}
 		}
@@ -88,5 +102,13 @@ public class Hud : MonoBehaviour {
 		string eq = PlayerControl.instance.current_weapon.ToString ();
 		Equipped.text = "Equipped: " + eq;
 		
+	}
+
+	public void AddBoomerang() {
+		boomAdded = true;
+	}
+
+	public void AddBow() {
+		bowAdded = true;
 	}
 }

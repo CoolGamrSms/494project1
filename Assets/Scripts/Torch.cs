@@ -58,7 +58,7 @@ public class Torch : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider coll) {
-		if (coll.CompareTag ("Link") || !pickedUp) {
+		if (coll.CompareTag ("Player") || !pickedUp) {
 			pickedUp = true;
 			this.transform.parent = PlayerControl.instance.transform;
 			Vector3 direction_offset = Vector3.zero;
