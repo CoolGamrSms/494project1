@@ -50,7 +50,7 @@ public class Torch : MonoBehaviour {
 			new_weapon_rotation.eulerAngles = direction_eulerangle;
 			this.transform.rotation = new_weapon_rotation;
 		}
-		if (Input.GetKeyDown (KeyCode.X) || Input.GetKeyDown (KeyCode.Z)) {
+		if (Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown (KeyCode.S)) {
 			pickedUp = false;
 			this.transform.parent = null;
 			StartCoroutine (Drop());

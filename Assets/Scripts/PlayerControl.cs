@@ -219,10 +219,9 @@ public class PlayerControl : MonoBehaviour {
                         coll.gameObject.GetComponent<enemyboom>().SetHit();
                     }
                 }
-                /*Vector3 myv = GetComponent<Rigidbody>().velocity;
                 Vector3 myv = GetComponent<Rigidbody>().velocity;
 
-                Vector3 knockback = coll.gameObject.GetComponent<Rigidbody>().velocity * 5;
+                /*Vector3 knockback = coll.gameObject.GetComponent<Rigidbody>().velocity * 5;
 
                 if(Vector3.Cross(myv, knockback) == Vector3.zero && Vector3.Dot(myv, knockback) > 0f) {
                     knockback *= -1f;
