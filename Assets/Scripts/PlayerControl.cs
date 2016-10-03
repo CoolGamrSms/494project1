@@ -66,9 +66,6 @@ public class PlayerControl : MonoBehaviour {
 			if (current_weapon == WeaponType.BOMBS) {
 				Instantiate (bomb, this.transform.position, Quaternion.identity);
 			}
-			if (current_weapon == WeaponType.BOW) {
-				//Shoot arrow
-			}
 			if (current_weapon == WeaponType.BOOMERANG) {
 				Instantiate (boomerang, this.transform.position, Quaternion.identity);
 			}
