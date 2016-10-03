@@ -112,7 +112,7 @@ public abstract class Enemy : MonoBehaviour
         GetComponent<SpriteRenderer>().material.color = c;
     }
 
-    public bool isOnScreen()
+    public virtual bool isOnScreen()
     {
         if (RoomTransition.S.current_state == EntityState.TRANSITION) return false;
         Camera cam = RoomTransition.S.GetComponent<Camera>();

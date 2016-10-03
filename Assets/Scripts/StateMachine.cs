@@ -364,7 +364,7 @@ public class StateLinkNormalMovement : State {
                                                                                 * time_delta_fraction;
 
             if ((pc.transform.position.x - 2f) % 16f > 11.1f) { }
-            else if ((pc.transform.position.y - 1.9f) % 11f > 6.65f) { }
+            else if ((pc.transform.position.y - 1.5f) % 11f > 7.2f) { }
             else {
                 if (Input.GetKeyDown(KeyCode.A))
                     state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 15, pc.magic_prefab));

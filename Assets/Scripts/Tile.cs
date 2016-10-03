@@ -67,7 +67,7 @@ public class Tile : MonoBehaviour {
         char c = ShowMapOnCamera.S.collisionS[tileNum];
         switch (c) {
         case 'D': // Door tile
-            gameObject.GetComponent<SpriteRenderer>().sortingOrder = 3;
+            gameObject.GetComponent<SpriteRenderer>().sortingOrder = 4;
             bc.enabled = false;
             break;
         case 'S': // Solid
@@ -87,7 +87,7 @@ public class Tile : MonoBehaviour {
             bc.size = new Vector3(0.5f, 1, 1);
             break;
 		case '3'://Tiles that should have a higher sorting order
-            gameObject.GetComponent<SpriteRenderer>().sortingOrder = 3;
+            gameObject.GetComponent<SpriteRenderer>().sortingOrder = 4;
             bc.center = Vector3.zero;
 			bc.size = Vector3.one;
 			break;

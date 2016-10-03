@@ -94,7 +94,7 @@ public class Hud : MonoBehaviour {
 		rupee_text.text = "Rupees: " + num_player_rupees.ToString ();
 
 		int player_health = PlayerControl.instance.health;
-		heart_text.text = "Health: " + player_health.ToString ();
+		heart_text.text = "HP: " + ((float)player_health/2f).ToString ();
 
 		int player_keys = PlayerControl.instance.keys;
 		key_text.text = "Keys: " + player_keys.ToString ();

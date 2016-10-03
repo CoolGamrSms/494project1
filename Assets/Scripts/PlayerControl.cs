@@ -45,8 +45,8 @@ public class PlayerControl : MonoBehaviour {
 
 	public float walking_velocity = 1.0f;
 	public int wallet = 0;
-	public int health = 3;
-	public int maxHealth = 3;
+	public int health = 6;
+	public int maxHealth = 6;
 	public int keys = 0;
 	public bool paused = false;
     public float cooldown;
@@ -164,14 +164,14 @@ public class PlayerControl : MonoBehaviour {
 		} else if (coll.gameObject.tag == "Heart") {
 			Destroy (coll.gameObject);
 			if (health < maxHealth) {
-				health++;
+				health+=2;
 				if (health > maxHealth) {
 					health = maxHealth;
 				}
 			}
 		} else if (coll.gameObject.tag == "Container") {
 			Destroy (coll.gameObject);
-			maxHealth++;
+            maxHealth += 2;
 			health = maxHealth;
 		} else if (coll.gameObject.tag == "Bow") {
 			Destroy (coll.gameObject);
