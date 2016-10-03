@@ -18,6 +18,7 @@ public class Warper : MonoBehaviour {
             p.x = camX;
             p.y = camY;
             MainCamera.transform.position = p;
+            SFXScript.S.StairsSound();
         }
     }
 

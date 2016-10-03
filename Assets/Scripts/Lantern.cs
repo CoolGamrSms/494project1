@@ -36,11 +36,13 @@ public class Lantern : MonoBehaviour {
 			if (ShowMapOnCamera.MAP [doorX + 1, doorY] == 29) {
 				ShowMapOnCamera.MAP [doorX, doorY] = 51;
 				ShowMapOnCamera.S.RedrawScreen (true);
-			}
+                SFXScript.S.OpenDoor();
+            }
 			if (ShowMapOnCamera.MAP [doorX - 1, doorY] == 29) {
 				ShowMapOnCamera.MAP [doorX, doorY] = 48;
 				ShowMapOnCamera.S.RedrawScreen (true);
-			}
+                SFXScript.S.OpenDoor();
+            }
 			/*if (doorX < this.transform.position.x) {
 				ShowMapOnCamera.MAP [doorX, doorY] = 51;
 				ShowMapOnCamera.S.RedrawScreen (true);

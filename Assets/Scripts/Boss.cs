@@ -17,7 +17,8 @@ public class Boss : MonoBehaviour {
 	}
 
 	void OnDestroy() {
-		ShowMapOnCamera.MAP[doorX, doorY] = (eastwest)?48:51;
+        SFXScript.S.OpenDoor();
+        ShowMapOnCamera.MAP[doorX, doorY] = (eastwest)?48:51;
 		ShowMapOnCamera.S.RedrawScreen(true);
 		Instantiate (container, this.transform.position, Quaternion.identity);
 	}

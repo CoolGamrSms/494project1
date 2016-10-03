@@ -30,6 +30,7 @@ public class Key : MonoBehaviour {
             foreach (GameObject go in mustDie) if (go != null) return;
             gameObject.GetComponent<BoxCollider>().enabled = true;
             gameObject.GetComponent<Renderer>().enabled = true;
+            if(mustDie.Length > 0) SFXScript.S.KeyAppear();
         }
 	}
 }

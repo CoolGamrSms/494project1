@@ -22,6 +22,7 @@ public class Aquamentus : Enemy
 
     void Fire()
     {
+        SFXScript.S.FireShot();
         GameObject f1 = (GameObject)Instantiate(fireballPrefab);
         f1.transform.position = transform.position;
         f1.GetComponent<Rigidbody>().velocity = Vector3.left * 4;
