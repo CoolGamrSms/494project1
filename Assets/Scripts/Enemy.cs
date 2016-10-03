@@ -203,6 +203,7 @@ public abstract class Enemy : MonoBehaviour
         }
         if(coll.gameObject.CompareTag("Boomerang"))
         {
+            if (boss) return;
             if (isBoomerangable()) Hurt();
             else Stun();
         }

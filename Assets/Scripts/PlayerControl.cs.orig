@@ -32,9 +32,7 @@ public class PlayerControl : MonoBehaviour {
     public GameObject bow;
 	public GameObject bomb;
 	public GameObject boomerang;
-<<<<<<< HEAD
     GameObject myBoomerang;
-=======
 	public Hud rupee_text;
 	public Hud heart_text;
 	public Hud key_text;
@@ -44,12 +42,11 @@ public class PlayerControl : MonoBehaviour {
 	public Hud Equipped;
 	public Hud Panel;
 	public Hud select;
->>>>>>> 16842387ad69496b107a9c11ea386ce9885ee13e
 
 	public float walking_velocity = 1.0f;
 	public int wallet = 0;
-	public int health = 3;
-	public int maxHealth = 3;
+	public int health = 6;
+	public int maxHealth = 6;
 	public int keys = 0;
 	public bool paused = false;
     public float cooldown;
@@ -91,18 +88,6 @@ public class PlayerControl : MonoBehaviour {
 			control_state_machine.ChangeState (new StateLinkNormalMovement (this));
 		}
 
-<<<<<<< HEAD
-=======
-		if (Input.GetKeyDown (KeyCode.X)) {
-			if (current_weapon == WeaponType.BOMBS) {
-				Instantiate (bomb, this.transform.position, Quaternion.identity);
-			}
-			if (current_weapon == WeaponType.BOOMERANG) {
-				Instantiate (boomerang, this.transform.position, Quaternion.identity);
-			}
-		}
-
->>>>>>> 16842387ad69496b107a9c11ea386ce9885ee13e
 		/*float horizontal_input = Input.GetAxis ("Horizontal");
 		float vertical_input = Input.GetAxis ("Vertical");
 		if (horizontal_input != 0.0f) {
@@ -179,14 +164,19 @@ public class PlayerControl : MonoBehaviour {
 		} else if (coll.gameObject.tag == "Heart") {
 			Destroy (coll.gameObject);
 			if (health < maxHealth) {
-				health++;
+				health+=2;
 				if (health > maxHealth) {
 					health = maxHealth;
 				}
 			}
 		} else if (coll.gameObject.tag == "Container") {
 			Destroy (coll.gameObject);
+<<<<<<< HEAD
+            maxHealth += 2;
+=======
+			Debug.Log ("Destroyed Heart Container");
 			maxHealth++;
+>>>>>>> 0caf42dbe4acc01ab1a74205e76cc4722dc6b1a5
 			health = maxHealth;
 		} else if (coll.gameObject.tag == "Bow") {
 			Destroy (coll.gameObject);
@@ -200,7 +190,7 @@ public class PlayerControl : MonoBehaviour {
 			Equipped.AddBow ();
 			Panel.AddBow ();
 			select.AddBow ();
-		} else if (coll.gameObject.tag == "Boomerang") {
+		} else if (coll.gameObject.tag == "BoomPickup") {
 			Destroy (coll.gameObject);
 			Debug.Log ("Boom Entered");
 			rupee_text.AddBoomerang ();
@@ -217,7 +207,6 @@ public class PlayerControl : MonoBehaviour {
 			if (this.current_state != EntityState.DAMAGED) {
                 if (coll.gameObject.GetComponent<Enemy>() != null && coll.gameObject.GetComponent<Enemy>().isHurt) return;
 
-<<<<<<< HEAD
                 //Shield blocking for enemy boomerangs
                 if(coll.gameObject.GetComponent<enemyboom>() != null)
                 {
@@ -235,12 +224,9 @@ public class PlayerControl : MonoBehaviour {
                         coll.gameObject.GetComponent<enemyboom>().SetHit();
                     }
                 }
-                /*Vector3 myv = GetComponent<Rigidbody>().velocity;
-=======
                 Vector3 myv = GetComponent<Rigidbody>().velocity;
->>>>>>> 16842387ad69496b107a9c11ea386ce9885ee13e
 
-                Vector3 knockback = coll.gameObject.GetComponent<Rigidbody>().velocity * 5;
+                /*Vector3 knockback = coll.gameObject.GetComponent<Rigidbody>().velocity * 5;
 
                 if(Vector3.Cross(myv, knockback) == Vector3.zero && Vector3.Dot(myv, knockback) > 0f) {
                     knockback *= -1f;
@@ -255,7 +241,7 @@ public class PlayerControl : MonoBehaviour {
                     if (knockback.y > 0f) knockback.x = 0f;
                 }
 
-                GetComponent<Rigidbody>().velocity = knockback;
+                GetComponent<Rigidbody>().velocity = knockback;*/
 
                 cooldown = 0.5f;
 

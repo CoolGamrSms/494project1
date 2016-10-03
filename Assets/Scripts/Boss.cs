@@ -4,6 +4,7 @@ using System.Collections;
 public class Boss : MonoBehaviour {
 
 	public int doorX, doorY;
+    public bool eastwest = false;
 	public GameObject container;
 	// Use this for initialization
 	void Start () {
@@ -16,7 +17,7 @@ public class Boss : MonoBehaviour {
 	}
 
 	void OnDestroy() {
-		ShowMapOnCamera.MAP[doorX, doorY] = 51;
+		ShowMapOnCamera.MAP[doorX, doorY] = (eastwest)?48:51;
 		ShowMapOnCamera.S.RedrawScreen(true);
 		Instantiate (container, this.transform.position, Quaternion.identity);
 	}
