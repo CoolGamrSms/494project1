@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
@@ -32,6 +33,15 @@ public class PlayerControl : MonoBehaviour {
 	public GameObject bomb;
 	public GameObject boomerang;
     GameObject myBoomerang;
+	public Hud rupee_text;
+	public Hud heart_text;
+	public Hud key_text;
+	public Hud bomb_select;
+	public Hud boom_select;
+	public Hud bow_select;
+	public Hud Equipped;
+	public Hud Panel;
+	public Hud select;
 
 	public float walking_velocity = 1.0f;
 	public int wallet = 0;
@@ -148,8 +158,7 @@ public class PlayerControl : MonoBehaviour {
 		if (coll.gameObject.tag == "Rupee") {
 			Destroy (coll.gameObject);
 			wallet++;
-		}
-		else if(coll.gameObject.tag == "Key") {
+		} else if (coll.gameObject.tag == "Key") {
 			Destroy (coll.gameObject);
 			keys++;
 		} else if (coll.gameObject.tag == "Heart") {
@@ -160,7 +169,36 @@ public class PlayerControl : MonoBehaviour {
 					health = maxHealth;
 				}
 			}
-		} else if (coll.gameObject.tag == "Enemy") {
+		} else if (coll.gameObject.tag == "Container") {
+			Destroy (coll.gameObject);
+			maxHealth++;
+			health = maxHealth;
+		} else if (coll.gameObject.tag == "Bow") {
+			Destroy (coll.gameObject);
+			Debug.Log ("Bow Entered");
+			rupee_text.AddBow ();
+			heart_text.AddBow ();
+			key_text.AddBow ();
+			bomb_select.AddBow ();
+			bow_select.AddBow ();
+			boom_select.AddBow ();
+			Equipped.AddBow ();
+			Panel.AddBow ();
+			select.AddBow ();
+		} else if (coll.gameObject.tag == "Boomerang") {
+			Destroy (coll.gameObject);
+			Debug.Log ("Boom Entered");
+			rupee_text.AddBoomerang ();
+			heart_text.AddBoomerang ();
+			key_text.AddBoomerang ();
+			bomb_select.AddBoomerang ();
+			bow_select.AddBoomerang ();
+			boom_select.AddBoomerang ();
+			Equipped.AddBoomerang ();
+			Panel.AddBoomerang ();
+			select.AddBoomerang ();
+		}
+		else if (coll.gameObject.tag == "Enemy") {
 			if (this.current_state != EntityState.DAMAGED) {
                 if (coll.gameObject.GetComponent<Enemy>() != null && coll.gameObject.GetComponent<Enemy>().isHurt) return;
 
@@ -182,6 +220,7 @@ public class PlayerControl : MonoBehaviour {
                     }
                 }
                 /*Vector3 myv = GetComponent<Rigidbody>().velocity;
+                Vector3 myv = GetComponent<Rigidbody>().velocity;
 
                 Vector3 knockback = coll.gameObject.GetComponent<Rigidbody>().velocity * 5;
 
@@ -198,7 +237,7 @@ public class PlayerControl : MonoBehaviour {
                     if (knockback.y > 0f) knockback.x = 0f;
                 }
 
-                GetComponent<Rigidbody>().velocity = knockback;*/
+                GetComponent<Rigidbody>().velocity = knockback;
 
                 cooldown = 0.5f;
 
